@@ -1,4 +1,5 @@
 # Import required packages
+import sys
 import cv2
 import pytesseract
 from accuracy_test import *
@@ -6,38 +7,38 @@ from accuracy_test import *
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 def simple():
-    img = cv2.imread("sample.jpg")
+    img = cv2.imread("images/sample.jpg")
     return pytesseract.image_to_string(img)
 
 def recipe():
-    img = cv2.imread("rep.jpg")
+    img = cv2.imread("images/rep.jpg")
     return pytesseract.image_to_string(img)
     
 def brothers():
-    img = cv2.imread("brothers.png")
+    img = cv2.imread("images/brothers.png")
     return pytesseract.image_to_string(img)
 
 def brotherswhite():
-    img = cv2.imread("brotherswhite.png")
+    img = cv2.imread("images/brotherswhite.png")
     return pytesseract.image_to_string(img)
 def gorillaz():
-    img = cv2.imread("gorillaz.png")
+    img = cv2.imread("images/gorillaz.png")
     return pytesseract.image_to_string(img)
 
 def berserk():
-    img = cv2.imread("gatsu.jpg")
+    img = cv2.imread("images/gatsu.jpg")
     return pytesseract.image_to_string(img)
 
 def crossgame():
-    img = cv2.imread("crossgame.png")
+    img = cv2.imread("images/crossgame.png")
     return pytesseract.image_to_string(img)
 
 def crossgameagain():
-    img = cv2.imread("crossgameagain.png")
+    img = cv2.imread("images/crossgameagain.png")
     return pytesseract.image_to_string(img)
 
 def bonclay():
-    img = cv2.imread("bonclay.png")
+    img = cv2.imread("images/bonclay.png")
     return pytesseract.image_to_string(img)
 
 def str_to_list_str(str1: str) -> list[str]:
@@ -74,7 +75,7 @@ def printing():
 
 strings = str_to_list_str(brotherswhite())
 
-with open('brothers_out.txt', 'w') as f:
+with open('images/brothers_out.txt', 'w') as f:
     for line in strings:
         f.write(line)
         f.write('\n')
