@@ -1,0 +1,3 @@
+Tesseract-OCR/** filter=lfs diff=lfs merge=lfs -text
+main/Tesseract-OCR/** filter=lfs diff=lfs merge=lfs -text
+main/Tesseract-OCR/libtesseract-5.dll filter=lfs diff=lfs merge=lfs -text
