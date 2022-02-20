@@ -1,13 +1,14 @@
 import os
 from numpy import diff
 
-class AccuracyTest:
+class AccuracyAssertion:
     #Accuracy test class used to test the accuracy of text reader
 
-    def assertAccuracy(self, txt_path: str, input: list[str], accuracy: int):
+    def assertAccuracy(self, test_name: str, txt_path: str, input: list[str], accuracy: int):
         """Tests accuracy by comparing imput list of strings to the solution
 
         Args:
+            test_name (str): used to generate output file 
             txt_path (str): solution .txt document
             input (list[str]): list of string to be tested
             accuracy (int): integer representing a percent from 0-100 of accuracy
@@ -21,6 +22,10 @@ class AccuracyTest:
 
         #create list of strings from solution .txt
         original_list = self.create_txt_list(txt_path)
+
+        #generates output file
+        out_file = self.generate_output_file(test_name ,input)
+    
         diff_count = 0
         total_count = 0
 
@@ -30,15 +35,18 @@ class AccuracyTest:
         if (line_diff < 0):
             #calculates the difference for each line of code for matching line numbers
             for i in range(len(input)):
-                temp = self.findNumberOfDifferences(input[i], original_list[i])
+                temp = self.findNumberOfDifferences(input[i], original_list[i], i, out_file)
                 diff_count += temp[0]
                 total_count += temp[1]
             
             #if there are remaining lines, each character from every line is added
+            output_file = open(out_file, 'w')
             for i in range(abs(line_diff)):
                 count = len(original_list[len(original_list) - i])
                 diff_count += count
                 total_count += count
+                output_file.write("Line " + str(i) + " missing")
+            output_file.close()
 
         else:
             #calculates the difference for each line of code for matching line numbers
@@ -48,16 +56,19 @@ class AccuracyTest:
                 total_count += temp[1]
             
             #if there are remaining lines, each character from every line is added
+            output_file = open(out_file, 'w')
             for i in range(abs(line_diff)):
-                count = len(input[len(input) - i])
+                count = len(original_list[len(original_list) - i])
                 diff_count += count
                 total_count += count
+                output_file.write("Line " + str(i) + " missing")
+            output_file.close()
 
         #calculates score
         score = 100 - (diff_count / total_count * 100)
 
         if (score < accuracy):
-            raise AssertionError("Accuracy Result was " + str(score) + " (expected " + str(accuracy) + ")")
+            raise self.failureException("Accuracy Result was " + str(score) + " (expected " + str(accuracy) + ")")
 
 
     def assertFileExists(self, path: str):
@@ -70,22 +81,26 @@ class AccuracyTest:
             AssertionError: thrown if the path does not lead to a file
         """
         if not os.path.lexists(path):
-            raise AssertionError('File not exists in path "' + path + '".')
+            raise self.failureException('File not exists in path "' + path + '".')
 
 
-    def findNumberOfDifferences(self, input1: list[str], input2: list[str]) -> list[int]:
+    def findNumberOfDifferences(self, input1: list[str], input2: list[str], line_number: int, output_path: str) -> list[int]:
         """Goes character by character and compares them, if they are not the same it logs the difference
 
         Args:
             input1 (list[str]): first list of string to compare 
             input2 (list[str]): second list of string to compare
-
+            line_number (int): current line number
+            output_path (str): path to output file
         Returns:
             list[int]: list of length 2 => list[0] == #difference, list[1] == #total_characters 
         """
 
         diff_count = 0
         total_count = 0
+
+        output_file = open(output_path, 'w')
+        output_file.write("Differences:\n")
 
         len_diff = len(input1) - len(input2)
         shorter = []
@@ -103,6 +118,9 @@ class AccuracyTest:
         for i in range(len(longer)):
             if (i > len(shorter) - 1):
                 diff_count += 1
+                output_file.write("Difference on line " + str(line_number) + " : " + str(i))
+                output_file.write('\n')
+
             else:
                 if (longer[i] != shorter[i]):
                     is_diff = True
@@ -115,8 +133,11 @@ class AccuracyTest:
                             is_diff = False
                     if (is_diff):
                         diff_count += 1
+                        output_file.write("Difference on line " + str(line_number) + " : " + str(i))
+                        output_file.write('\n')
             total_count += 1
 
+        output_file.close()
         return [diff_count, total_count]
                     
 
@@ -150,4 +171,33 @@ class AccuracyTest:
             int: difference num
         """
         diff = len(input) - len(original)
-        return diff 
+        return diff
+
+
+    def generate_output_file(self, name: str, string: list[str]) -> str:
+        """generates an output .txt file that represents the input list of string. adds additional padding at the bottom to add differences
+           closes the file when done
+
+        Args:
+            path (str): String that represents the NAME of the output file. DO NOT ADD .TXT (name should ideally be unique for each test)
+            string (list[str]): input list of string to be written
+
+        Returns:
+            str: path to output file
+        """
+
+        path_front = r"tests\output_txt\\"
+        path_back = r".txt"
+        path_full = path_front + name + path_back
+        
+        with open(path_full , 'w') as f:
+            for line in string:
+                f.write(line)
+                f.write('\n') 
+
+            f.write('\n')
+            f.write('\n')
+            f.write('\n')
+            f.close()
+
+        return path_full

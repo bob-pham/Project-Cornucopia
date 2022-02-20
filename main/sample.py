@@ -1,15 +1,17 @@
 # Import required packages
 import sys
+sys.path.append('../')
+
 import cv2
 import pytesseract
-from accuracy_test import *
+
 
 # something going wrong with tesseract so commenting this out for now
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 #example on how to call tesseract with opencv
-def receipt():
-    img = cv2.imread("images/rep.jpg")
+def read_txt(path: str):
+    img = cv2.imread(path)
     return pytesseract.image_to_string(img) #returns a big long string of all the text
 
 def str_to_list_str(str1: str) -> list[str]:
@@ -31,4 +33,3 @@ def str_to_list_str(str1: str) -> list[str]:
     return strings
 
 # \$\d+(?:\.\d+)? <--- money regex
-
