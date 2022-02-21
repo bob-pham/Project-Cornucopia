@@ -61,3 +61,6 @@ def str_to_list_str(str1: str) -> list[str]:
     return strings
 
 # \$\d+(?:\.\d+)? <--- money regex
+
+def filter_sentence(sentence: str) -> str:
+    #TODO
