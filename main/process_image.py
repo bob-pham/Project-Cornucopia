@@ -8,6 +8,19 @@ import pytesseract
 #Path to Tesseract so it can process image
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
+
+def crop_image(path: str, img_x1: int, img_y1: int, img_x2: int, img_y2: int):
+    """crops an image pased on parameters
+
+    Args:
+        path (str): path to image
+        img_x1 (int): x-coordinate of top-left corner
+        img_y1 (int): y-coordinate of top-left corner
+        img_x2 (int): x-coordinate of bottom-right corner
+        img_y2 (int): x-coordinate of bottom-right corner
+    """
+    #TODO
+
 #example on how to call tesseract with opencv
 def read_txt_from_image(path: str) -> list[str]:
     """Reads the text from an image, returns a list of sentences from receipt that has been filtered for relevancy 
