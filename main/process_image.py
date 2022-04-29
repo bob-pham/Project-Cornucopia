@@ -4,24 +4,23 @@ sys.path.append('../')
 
 import cv2
 import pytesseract
+import re
 
 #Path to Tesseract so it can process image
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-
-def crop_image(path: str, img_x1: int, img_y1: int, img_x2: int, img_y2: int):
+def crop_image(image, img_x1: int, img_y1: int, img_x2: int, img_y2: int):
     """crops an image pased on parameters
 
     Args:
-        path (str): path to image
+        image (img): the image
         img_x1 (int): x-coordinate of top-left corner
         img_y1 (int): y-coordinate of top-left corner
         img_x2 (int): x-coordinate of bottom-right corner
         img_y2 (int): x-coordinate of bottom-right corner
     """
-    #TODO
+    return image[img_y1:img_y2, img_x1:img_x2]
 
-#example on how to call tesseract with opencv
 def read_txt_from_image(path: str) -> list[str]:
     """Reads the text from an image, returns a list of sentences from receipt that has been filtered for relevancy 
 
@@ -71,9 +70,34 @@ def str_to_list_str(str1: str) -> list[str]:
                 current_string.append('I')
             case _:
                 current_string.append(to_edit[i])
-    return strings
-
-# \$\d+(?:\.\d+)? <--- money regex
+    return strings 
 
 def filter_sentence(sentence: str) -> str:
-    #TODO
+    """removes bloat from sentence that is not relevant to item logging
+
+    Args:
+        sentence (str): input sentence
+
+    Returns:
+        str: the sentence that has had the bloat removed
+    """
+
+    # removes money form sentence replacing with blank char
+    sentence = re.sub('\$\d+(?:\.\d+)?', '', sentence)
+
+    length = len(sentence)
+    start = 0
+    end = length - 1
+
+    # determines and removes the leading and trailing characters
+    for x in range(length):
+        start = x
+        if (sentence[x] != ' ' or sentence[x] != ''):
+            break
+
+    for x in range(length):
+        if (sentence[length - x - 1] != ' ' or sentence[length - x - 1] != ''):
+            break
+        end = length - x
+
+    sentence = sentence[start:end]
