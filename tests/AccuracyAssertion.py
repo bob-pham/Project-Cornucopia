@@ -65,10 +65,30 @@ class AccuracyAssertion:
             output_file.close()
 
         #calculates score
-        score = 100 - (diff_count / total_count * 100)
+        objective_score = 100 - (diff_count / total_count * 100)
+        
+        #calcuates score
+        subjective_score = 0
+        total_chars = self.find_total_characters(original_list)
 
-        if (score < accuracy):
-            raise self.failureException("Accuracy Result was " + str(score) + " (expected " + str(accuracy) + ")")
+        original_dict = self.find_character_counts(original_list)
+        input_dict = self.find_character_counts(input)
+
+        #compares the two files to evaluate same characters
+        for key in original_dict.keys():
+            original_count = original_dict[key]
+            input_count = input_dict[key]
+            weight = original_count / total_chars
+
+            if (key in input_dict):
+                subjective_score += weight * 100 * (min(original_count, input_count) / max(original_count, input_count))
+
+        total_score = (objective_score + subjective_score) / 2
+
+        if (total_score < accuracy):
+            raise self.failureException("Accuracy Result was " + str(total_score) + " (expected " + str(accuracy) + ")")
+
+
 
 
     def assertFileExists(self, path: str):
@@ -82,6 +102,8 @@ class AccuracyAssertion:
         """
         if not os.path.lexists(path):
             raise self.failureException('File not exists in path "' + path + '".')
+
+
 
 
     def findNumberOfDifferences(self, input1: list[str], input2: list[str], line_number: int, output_path: str) -> list[int]:
@@ -139,7 +161,9 @@ class AccuracyAssertion:
 
         output_file.close()
         return [diff_count, total_count]
-                    
+
+
+
 
     def create_txt_list(self, txt_path:str) -> list[str]:
         """returns a list of strings that represent the solution .txt
@@ -160,6 +184,8 @@ class AccuracyAssertion:
         return txt_list
 
 
+
+
     def check_line_diff(self, original: list[str], input: list[str]) -> int:
         """returns the difference in line length
 
@@ -172,6 +198,8 @@ class AccuracyAssertion:
         """
         diff = len(input) - len(original)
         return diff
+
+
 
 
     def generate_output_file(self, name: str, string: list[str]) -> str:
@@ -201,3 +229,44 @@ class AccuracyAssertion:
             f.close()
 
         return path_full
+
+
+
+    def find_character_counts(self, text: list[str]) -> dict:
+        """returns a dictionary with the counts of all the characters
+
+        Args:
+            text (list[str]): list of strings that represent text from the image
+
+        Returns:
+            dict: dictionary that contains all the different characters
+        """
+        characters = {}
+
+        for string in text:
+            for char in string:
+                if (char in characters):
+                    characters[char] += 1
+                else: 
+                    characters[char] = 1
+
+        return characters
+
+
+
+    def find_total_characters(self, text: list[str]) -> int:
+        """returns the total number of characters in the text
+
+        Args:
+            text (list[str]): input strings
+
+        Returns:
+            int: number of characters
+        """
+
+        total_count = 0
+
+        for string in text:
+            total_count += len(string)
+        
+        return total_count

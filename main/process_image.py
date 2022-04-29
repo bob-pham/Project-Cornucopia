@@ -100,4 +100,5 @@ def filter_sentence(sentence: str) -> str:
             break
         end = length - x
 
+    #get the substring
     sentence = sentence[start:end]
