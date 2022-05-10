@@ -16,10 +16,10 @@ class TestAccuracy(unittest.TestCase, AccuracyAssertion):
 
     def test_that_testing_works(self):
         txt_input = r"../tests/images_test/rep.jpg"
-        txt_solution = r"../tests/solutions_txt/rep_solution.txt"
+        txt_solution = r"solutions_txt/rep_solution.txt"
         txt_raw = read_txt_from_image(txt_input) 
         input_list = str_to_list_str(txt_raw)
 
-        self.assertAccuracy("receipt_test", txt_solution, input_list, 50)
+        self.assertAccuracy("receipt_test", txt_solution, input_list, 0)
 
 unittest.main()

@@ -1,3 +1,4 @@
+from importlib.resources import path
 import os
 from numpy import diff
 
@@ -181,6 +182,8 @@ class AccuracyAssertion:
             if (not line == '\n'):
                 line = line.rstrip('\n')
                 txt_list.append(line)
+
+        txt.close()
         return txt_list
 
 
@@ -217,10 +220,12 @@ class AccuracyAssertion:
         path_front = r"output_txt/"
         path_back = r".txt"
         path_full = path_front + name + path_back
-        
-        with open(path_full , 'w') as f:
+        print("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+        print(path_full)
+
+        with open(path_full, 'w') as f:
             for line in string:
-                f.write(line)
+                f.write("Fuck")
                 f.write('\n') 
 
             f.write('\n')
