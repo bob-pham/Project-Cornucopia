@@ -1,20 +1,6 @@
-RECEIPT
-Terminal#t1 01-02-2018 11:32AM
-1xT-Shirt 
-25.50
-1x Watches 
-299.00
-1x Pants 
-32.99
-1x Socks 
-6.50
-TOTAL AMOUNT 
-363.99
-CASH 
-400.00
-CHANGE 
-36.01
-Bank Card FI OEE IE IOI
-Approvaltt 192107
-sence ® THANK YOU! en aicee
-WIT
+1xT-Shirt
+1x Watches
+1x Pants
+1x Socks
+TOTAL AMOUNT
+CASH

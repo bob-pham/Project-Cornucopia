@@ -15,6 +15,9 @@ class TestAccuracy(unittest.TestCase, AccuracyAssertion):
 
 
     def test_that_testing_works(self):
+        """
+        tests that it prints 
+        """
         txt_input = r"../tests/images_test/rep.jpg"
         txt_solution = r"solutions_txt/rep_solution.txt"
         input_list = read_txt_from_image(txt_input) 
