@@ -1,11 +1,9 @@
-from importlib.resources import path
 import os
-from numpy import diff
-
+import time
 class AccuracyAssertion:
     #Accuracy test class used to test the accuracy of text reader
 
-    def assertAccuracy(self, test_name: str, txt_path: str, input: list[str], accuracy: int):
+    def assertAccuracy(self, test_name: str, txt_path: str, read_txt: list[str], accuracy: int):
         """Tests accuracy by comparing imput list of strings to the solution
 
         Args:
@@ -25,45 +23,47 @@ class AccuracyAssertion:
         original_list = self.create_txt_list(txt_path)
 
         #generates output file
-        out_file = self.generate_output_file(test_name ,input)
+        self.generate_output_file(test_name, read_txt)
+        out_file = 'output_txt/output_differences/' + test_name + '.txt'
+
     
         diff_count = 0
         total_count = 0
 
         #int equal to the line difference
-        line_diff = self.check_line_diff(original_list, input)
+        line_diff = self.check_line_diff(original_list, read_txt)
 
         if (line_diff < 0):
             #calculates the difference for each line of code for matching line numbers
-            for i in range(len(input)):
-                temp = self.findNumberOfDifferences(input[i], original_list[i], i, out_file)
+            for i in range(len(read_txt)):
+                temp = self.findNumberOfDifferences(read_txt[i], original_list[i], i, out_file)
                 diff_count += temp[0]
                 total_count += temp[1]
             
             #if there are remaining lines, each character from every line is added
-            output_file = open(out_file, 'w')
-            for i in range(0, abs(line_diff), -1):
-                count = len(original_list[i])
-                diff_count += count
-                total_count += count
-                output_file.write("Line " + str(i) + " missing")
-            output_file.close()
+            with open(out_file, 'w') as output_file:
+                for i in range(0, abs(line_diff), -1):
+                    count = len(original_list[i])
+                    diff_count += count
+                    total_count += count
+                    output_file.write("Line " + str(i) + " missing")
+                output_file.close()
 
         else:
             #calculates the difference for each line of code for matching line numbers
             for i in range(len(original_list)):
-                temp = self.findNumberOfDifferences(input[i], original_list[i])
+                temp = self.findNumberOfDifferences(read_txt[i], original_list[i])
                 diff_count += temp[0]
                 total_count += temp[1]
             
             #if there are remaining lines, each character from every line is added
-            output_file = open(out_file, 'w')
-            for i in range(abs(line_diff)):
-                count = len(original_list[len(original_list) - i])
-                diff_count += count
-                total_count += count
-                output_file.write("Line " + str(i) + " missing")
-            output_file.close()
+            with open(out_file, 'w') as output_file:
+                for i in range(abs(line_diff)):
+                    count = len(original_list[len(original_list) - i])
+                    diff_count += count
+                    total_count += count
+                    output_file.write("Line " + str(i) + " missing")
+                output_file.close()
 
         #calculates score
         objective_score = 0 if total_count <= 0 else 100 - ((diff_count / total_count) * 100)
@@ -73,7 +73,7 @@ class AccuracyAssertion:
         total_chars = self.find_total_characters(original_list)
 
         original_dict = self.find_character_counts(original_list)
-        input_dict = self.find_character_counts(input)
+        input_dict = self.find_character_counts(read_txt)
 
         #compares the two files to evaluate same characters
         for key in original_dict.keys():
@@ -122,45 +122,46 @@ class AccuracyAssertion:
         diff_count = 0
         total_count = 0
 
-        output_file = open(output_path, 'w')
-        output_file.write("Differences:\n")
+        with open(output_path, 'w') as output_file:
+            output_file.write("Differences:\n")
 
-        len_diff = len(input1) - len(input2)
-        shorter = []
-        longer = []
-        
-        if (len_diff < 0):
-            shorter = list(input1)
-            longer = list(input2)
-        else:
-            shorter = list(input2)
-            longer = list(input1)
+            len_diff = len(input1) - len(input2)
+            shorter = []
+            longer = []
 
-        len_diff = abs(len_diff)
-
-        for i in range(len(longer)):
-            if (i > len(shorter) - 1):
-                diff_count += 1
-                output_file.write("Difference on line " + str(line_number) + " : " + str(i))
-                output_file.write('\n')
-
+            if (len_diff < 0):
+                shorter = list(input1)
+                longer = list(input2)
             else:
-                if (longer[i] != shorter[i]):
-                    is_diff = True
+                shorter = list(input2)
+                longer = list(input1)
 
-                    #Strings may be of differing lengths due to missing characters, searches around for similar characters
-                    for x in range(len_diff):
-                        if (i - x >= 0 and longer[i-x] == shorter[i]):
-                            is_diff = False
-                        elif (i + x < len(shorter) and longer[i] == shorter[i+x]):
-                            is_diff = False
-                    if (is_diff):
-                        diff_count += 1
-                        output_file.write("Difference on line " + str(line_number) + " : " + str(i))
-                        output_file.write('\n')
-            total_count += 1
+            len_diff = abs(len_diff)
 
-        output_file.close()
+            for i in range(len(longer)):
+                if (i > len(shorter) - 1):
+                    diff_count += 1
+                    output_file.write("Difference on line " + str(line_number) + " : " + str(i))
+                    output_file.write('\n')
+
+                else:
+                    if (longer[i] != shorter[i]):
+                        is_diff = True
+
+                        #Strings may be of differing lengths due to missing characters, searches around for similar characters
+                        for x in range(len_diff):
+                            if (i - x >= 0 and longer[i-x] == shorter[i]):
+                                is_diff = False
+                            elif (i + x < len(shorter) and longer[i] == shorter[i+x]):
+                                is_diff = False
+                        if (is_diff):
+                            diff_count += 1
+                            output_file.write("Difference on line " + str(line_number) + " : " + str(i))
+                            output_file.write('\n')
+                total_count += 1
+
+            output_file.close()
+
         return [diff_count, total_count]
 
 
@@ -175,21 +176,20 @@ class AccuracyAssertion:
         Returns:
             list[str]: list of strings representing txt in solution .txt
         """
-        txt = open(txt_path, 'r')
         txt_list = []
+        with open(txt_path, 'r') as txt:
+            for line in txt:
+                if (not line == '\n'):
+                    line = line.rstrip('\n')
+                    txt_list.append(line)
+            txt.close()
 
-        for line in txt:
-            if (not line == '\n'):
-                line = line.rstrip('\n')
-                txt_list.append(line)
-
-        txt.close()
         return txt_list
 
 
 
 
-    def check_line_diff(self, original: list[str], input: list[str]) -> int:
+    def check_line_diff(self, original: list[str], read_txt: list[str]) -> int:
         """returns the difference in line length
 
         Args:
@@ -199,7 +199,7 @@ class AccuracyAssertion:
         Returns:
             int: difference num
         """
-        diff = len(input) - len(original)
+        diff = len(read_txt) - len(original)
         return diff
 
 
@@ -213,27 +213,17 @@ class AccuracyAssertion:
             path (str): String that represents the NAME of the output file. DO NOT ADD .TXT (name should ideally be unique for each test)
             string (list[str]): input list of string to be written
 
-        Returns:
-            str: path to output file
         """
 
-        path_front = r"output_txt/"
-        path_back = r".txt"
-        path_full = path_front + name + path_back
-        print("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
-        print(path_full)
-
-        with open(path_full, 'w') as f:
+        path_front = r'output_txt/'
+        path_back = r'.txt'
+        with open(path_front + name + path_back, 'w') as f:
             for line in string:
-                f.write("Fuck")
-                f.write('\n') 
-
-            f.write('\n')
-            f.write('\n')
-            f.write('\n')
+                f.write(line);
+                f.write('\n')            
             f.close()
 
-        return path_full
+
 
 
 

@@ -39,7 +39,7 @@ def read_txt_from_image(path: str) -> list[str]:
     read_txt = str_to_list_str(read_txt)
 
 
-    if (read_txt):
+    if (not read_txt):
         raise Exception("Failed to read any text")
     return read_txt
 
@@ -70,7 +70,12 @@ def str_to_list_str(str1: str) -> list[str]:
                 current_string.append('I')
             case _:
                 current_string.append(to_edit[i])
+
+    strings.append(''.join(map(str, current_string)))
+
     return strings 
+
+
 
 def filter_sentence(sentence: str) -> str:
     """removes bloat from sentence that is not relevant to item logging
@@ -102,3 +107,4 @@ def filter_sentence(sentence: str) -> str:
 
     #get the substring
     sentence = sentence[start:end]
+
