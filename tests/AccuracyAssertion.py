@@ -41,8 +41,8 @@ class AccuracyAssertion:
             
             #if there are remaining lines, each character from every line is added
             output_file = open(out_file, 'w')
-            for i in range(abs(line_diff)):
-                count = len(original_list[len(original_list) - i])
+            for i in range(0, abs(line_diff), -1):
+                count = len(original_list[i])
                 diff_count += count
                 total_count += count
                 output_file.write("Line " + str(i) + " missing")
@@ -65,7 +65,7 @@ class AccuracyAssertion:
             output_file.close()
 
         #calculates score
-        objective_score = 100 - (diff_count / total_count * 100)
+        objective_score = 0 if total_count <= 0 else 100 - ((diff_count / total_count) * 100)
         
         #calcuates score
         subjective_score = 0
@@ -76,17 +76,17 @@ class AccuracyAssertion:
 
         #compares the two files to evaluate same characters
         for key in original_dict.keys():
-            original_count = original_dict[key]
-            input_count = input_dict[key]
-            weight = original_count / total_chars
-
             if (key in input_dict):
+                original_count = original_dict[key]
+                weight = original_count / total_chars
+                input_count = input_dict[key]
+
                 subjective_score += weight * 100 * (min(original_count, input_count) / max(original_count, input_count))
 
         total_score = (objective_score + subjective_score) / 2
 
         if (total_score < accuracy):
-            raise self.failureException("Accuracy Result was " + str(total_score) + " (expected " + str(accuracy) + ")")
+            raise self.failureException("Accuracy result was " + str(total_score) + " (expected " + str(accuracy) + ")")
 
 
 
@@ -214,7 +214,7 @@ class AccuracyAssertion:
             str: path to output file
         """
 
-        path_front = r"tests\output_txt\\"
+        path_front = r"output_txt/"
         path_back = r".txt"
         path_full = path_front + name + path_back
         
