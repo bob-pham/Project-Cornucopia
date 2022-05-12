@@ -1,5 +1,4 @@
 import os
-import time
 class AccuracyAssertion:
     #Accuracy test class used to test the accuracy of text reader
 
@@ -52,14 +51,14 @@ class AccuracyAssertion:
         else:
             #calculates the difference for each line of code for matching line numbers
             for i in range(len(original_list)):
-                temp = self.findNumberOfDifferences(read_txt[i], original_list[i])
+                temp = self.findNumberOfDifferences(read_txt[i], original_list[i], i, out_file)
                 diff_count += temp[0]
                 total_count += temp[1]
             
             #if there are remaining lines, each character from every line is added
             with open(out_file, 'w') as output_file:
-                for i in range(abs(line_diff)):
-                    count = len(original_list[len(original_list) - i])
+                for i in range(0, abs(line_diff), -1):
+                    count = len(original_list[i])
                     diff_count += count
                     total_count += count
                     output_file.write("Line " + str(i) + " missing")
@@ -219,8 +218,8 @@ class AccuracyAssertion:
         path_back = r'.txt'
         with open(path_front + name + path_back, 'w') as f:
             for line in string:
-                f.write(line);
-                f.write('\n')            
+                f.write(line)
+                f.write('\n')                   
             f.close()
 
 

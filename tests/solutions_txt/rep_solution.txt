@@ -1,12 +1,5 @@
-RECEIPT
-Terminal#1 01-02-2018 11:32AM
-1xT-Shirt $25.50
-1x Watches $299.00
-1x Pants $32.99
-1x Socks $6.50
-TOTAL AMOUNT $363.99
-CASH $400.00
-CHANGE $36.01
-Bank Card
-Approval# 192107
-THANK YOU! 
+1x T-Shirt
+1x Watches
+1x Pants
+1x Socks
+
