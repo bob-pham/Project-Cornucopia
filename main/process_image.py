@@ -36,12 +36,14 @@ def read_txt_from_image(path: str) -> list[str]:
 
     img = cv2.imread(path)
     read_txt = pytesseract.image_to_string(img)
+    # print(read_txt)
     read_txt = str_to_list_str(read_txt)
 
-
-    if (not read_txt):
-        raise Exception("Failed to read any text")
+    # if (not read_txt):
+        # raise Exception("Failed to read any text")
     return read_txt
+
+
 
 
 def str_to_list_str(str1: str) -> list[str]:
@@ -59,21 +61,44 @@ def str_to_list_str(str1: str) -> list[str]:
     to_edit = list(str1)
     
     for i in range(len(to_edit)):
-        match to_edit[i]:
-            case '\n':
-                if (len(current_string) > 0):
-                    temp = ''.join(map(str, current_string))
-                    strings.append(temp)
-                current_string = []
-            # The rest of these cases are to filter known edge-cases of poor text detection
-            case '|':
-                current_string.append('I')
-            case _:
-                current_string.append(to_edit[i])
+        curr = to_edit[i]
+        if (curr == '\n'):
+            if (len(current_string) > 0):
+                temp = ''.join(map(str, current_string))
+                temp = temp.split("$")
+                for l in temp:
+                    strings.append(l)
+            current_string = []
+        elif (curr == '|'):
+            current_string.append('I')
+        else:
+            current_string.append(curr)
 
-    strings.append(''.join(map(str, current_string)))
+    strings = filter_raw_sentences(strings)
 
     return strings 
+
+
+
+def filter_raw_sentences(raw_sentence: list[str]) -> list[str]:
+    """goes through the list of raw sentences and removes irrelevant information
+        assumes that the first sentence is irrelevant information 
+
+    Args:
+        raw_sentence (list[str]): 
+
+    Returns:
+        list[str]: filtered sentence
+    """
+    
+    filtered_sentences = []
+
+    for i in range(2, len(raw_sentence) - 6):
+        temp = filter_sentence(raw_sentence[i])
+        if (temp):
+            filtered_sentences.append(temp)
+
+    return filtered_sentences
 
 
 
@@ -89,6 +114,9 @@ def filter_sentence(sentence: str) -> str:
 
     # removes money form sentence replacing with blank char
     sentence = re.sub('\$\d+(?:\.\d+)?', '', sentence)
+
+    if (re.search('^-?[0-9][0-9,\.]+$', sentence)):
+        return None
 
     length = len(sentence)
     start = 0
@@ -107,4 +135,5 @@ def filter_sentence(sentence: str) -> str:
 
     #get the substring
     sentence = sentence[start:end]
+    return sentence
 
