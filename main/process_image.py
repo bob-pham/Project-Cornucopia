@@ -34,13 +34,23 @@ def read_txt_from_image(path: str) -> list[str]:
         list[str]: fully optimized list of string representing text from receipt
     """
 
+    # Image processing
+    # Reads in the image -> resizes it for speed -> converts it to black and white -> crops
     img = cv2.imread(path)
+    # img = cv2.resize(img, (0, 0), fx = 0.2, fy = 0.2)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    (thresh, img) = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+   
+
+    #get raw text from image
     read_txt = pytesseract.image_to_string(img)
-    # print(read_txt)
+    
+    #filter text
     read_txt = str_to_list_str(read_txt)
 
-    # if (not read_txt):
-        # raise Exception("Failed to read any text")
+    #if no text was read, raise exception
+    if (not read_txt):
+        raise Exception("Failed to read any text")
     return read_txt
 
 
@@ -137,3 +147,18 @@ def filter_sentence(sentence: str) -> str:
     sentence = sentence[start:end]
     return sentence
 
+def testing():
+    img = cv2.imread('../tests/images_test/rep.jpg')
+    # img1 = cv2.resize(img, (0, 0), fx = 0.2, fy = 0.2)
+    img2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    (thresh, img3) = cv2.threshold(img2, 127, 255, cv2.THRESH_BINARY)
+
+    cv2.imshow('original', img);
+    # cv2.imshow('rescaled', img1);
+    cv2.imshow('grayscaled', img2);
+    cv2.imshow('blackandwhite', img3);
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+testing()
