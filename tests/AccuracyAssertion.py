@@ -1,6 +1,9 @@
 import os
 class AccuracyAssertion:
     #Accuracy test class used to test the accuracy of text reader
+    
+    OBJECTIVE_WEIGHT = 0.3
+    SUBJECTIVE_WEIGHT = 0.7
 
     def assertAccuracy(self, test_name: str, txt_path: str, read_txt: list[str], accuracy: int):
         """Tests accuracy by comparing imput list of strings to the solution
@@ -83,10 +86,10 @@ class AccuracyAssertion:
 
                 subjective_score += weight * 100 * (min(original_count, input_count) / max(original_count, input_count))
 
-        total_score = (objective_score + subjective_score) / 2
+        total_score = (objective_score * self.OBJECTIVE_WEIGHT) + (subjective_score * self.SUBJECTIVE_WEIGHT)
 
         if (total_score < accuracy):
-            raise self.failureException("Accuracy result was " + str(total_score) + " (expected " + str(accuracy) + ")")
+            raise self.failureException("Accuracy result was " + str(total_score) + " (expected " + str(accuracy) + "(" + str(objective_score) + " + " + str(subjective_score) + ")")
 
 
 
