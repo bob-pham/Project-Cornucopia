@@ -227,8 +227,6 @@ class AccuracyAssertion:
 
 
 
-
-
     def find_character_counts(self, text: list[str]) -> dict:
         """returns a dictionary with the counts of all the characters
 
