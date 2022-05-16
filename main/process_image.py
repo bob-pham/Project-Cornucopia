@@ -2,9 +2,14 @@
 import sys
 sys.path.append('../')
 
+import os
 import cv2
 import pytesseract
 import re
+
+# CONSTANTS
+
+IMG_SIZE = 500
 
 #Path to Tesseract so it can process image
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -34,13 +39,21 @@ def read_txt_from_image(path: str) -> list[str]:
         list[str]: fully optimized list of string representing text from receipt
     """
 
+    # Makes sure the file exists
+    assertFileExists(path)
+
     # Image processing
-    # Reads in the image -> resizes it for speed -> converts it to black and white -> crops
+    # Reads in the image -> resizes it for speed -> converts it to black and white -> crops (nvm no crop it decreases accuracy)
     img = cv2.imread(path)
-    # img = cv2.resize(img, (0, 0), fx = 0.2, fy = 0.2)
+    
+    height = img.shape[0]
+    width = img.shape[1]
+    scale_factor = width if width < height else height
+    scale_factor = IMG_SIZE / scale_factor 
+
+    img1 = cv2.resize(img, (0, 0), fx = scale_factor, fy = scale_factor)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    (thresh, img) = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
-   
+    # (thresh, img) = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY) <- made readings too inaccurate, but improves speed by 50%
 
     #get raw text from image
     read_txt = pytesseract.image_to_string(img)
@@ -56,7 +69,7 @@ def read_txt_from_image(path: str) -> list[str]:
 
 
 
-def str_to_list_str(str1: str) -> list[str]:
+def str_to_list_str(to_edit: str) -> list[str]:
     """Converts a single large string into a list of strings, splitting based on sentences. Case statements to filter known edge cases in read text
 
     Args:
@@ -66,27 +79,47 @@ def str_to_list_str(str1: str) -> list[str]:
         list[str]: unfiltered list of strings representing the receipt that was read
     """
 
-    strings = []
-    current_string = []
-    to_edit = list(str1)
+    to_edit = to_edit.upper()
     
-    for i in range(len(to_edit)):
-        curr = to_edit[i]
-        if (curr == '\n'):
-            if (len(current_string) > 0):
-                temp = ''.join(map(str, current_string))
-                temp = temp.split("$")
-                for l in temp:
-                    strings.append(l)
-            current_string = []
-        elif (curr == '|'):
-            current_string.append('I')
-        else:
-            current_string.append(curr)
+    to_edit = to_edit.replace('\n', ' ')
 
-    strings = filter_raw_sentences(strings)
+    # gets rid of everything after TOTAL and Subtotal, since none of it will be relevant
+    to_edit = to_edit.split('SUBTOTAL')
+    to_edit = to_edit[0]
+    to_edit = to_edit.split('TOTAL')
+    to_edit = to_edit[0]
 
-    return strings 
+    # gets rid of everything after credit, debit, cash, balance
+    to_edit = to_edit.split('CREDIT')
+    to_edit = to_edit[0]
+    to_edit = to_edit.split('DEBIT')
+    to_edit = to_edit[0]
+    to_edit = to_edit.split('CASH')
+    to_edit = to_edit[0]
+    to_edit = to_edit.split('BALANCE')
+    to_edit = to_edit[0]
+
+    # gets rid of everything before a phone number
+    to_edit = re.split('(\(?[1-9]\d{2}\)?)([\s|\-|])(\d{3})([\s|\-])(\d{4})', to_edit)
+    to_edit = to_edit[len(to_edit) - 1] if len(to_edit) > 1 else to_edit[0]
+
+    #gets rid of everything before a date
+    to_edit = re.split('(\d{2}[\-|\/|\s])(\d{2}[\-|\/|\s])(\d{4})', to_edit)
+    to_edit = to_edit[len(to_edit) - 1] if len(to_edit) > 1 else to_edit[0]
+
+    #gets rid of everything before the last time stamp
+    to_edit = re.split('(\d{1,2}):(\d{2})\s?([a|A|p|P][m|M])?', to_edit)
+    to_edit = to_edit[len(to_edit) - 1]
+
+    #splits elements based off of where money regex was
+    if (to_edit.__contains__('$')):
+        filtered = re.split('\$\d+(?:\.\d+)?', to_edit)
+    else:
+        filtered = re.split('\d+(?:\.\d+)?', to_edit)
+
+    filtered = filter_raw_sentences(filtered)
+
+    return filtered 
 
 
 
@@ -103,9 +136,9 @@ def filter_raw_sentences(raw_sentence: list[str]) -> list[str]:
     
     filtered_sentences = []
 
-    for i in range(2, len(raw_sentence) - 6):
-        temp = filter_sentence(raw_sentence[i])
-        if (temp):
+    for i in raw_sentence:
+        temp = filter_sentence(i)
+        if (temp and len(temp) > 2):
             filtered_sentences.append(temp)
 
     return filtered_sentences
@@ -122,43 +155,41 @@ def filter_sentence(sentence: str) -> str:
         str: the sentence that has had the bloat removed
     """
 
-    # removes money form sentence replacing with blank char
-    sentence = re.sub('\$\d+(?:\.\d+)?', '', sentence)
+    # if sentence contains any of these words, likely is not relevant
+    if (re.search('COUPON', sentence) or re.search('FEE', sentence) or re.search('SHOPPING', sentence) or re.search('TAX', sentence) or re.search('PRICE', sentence) or re.search('SAVE', sentence) or re.search("% OFF", sentence)):
+        return ""
 
-    if (re.search('^-?[0-9][0-9,\.]+$', sentence)):
-        return None
+    # removes any sort of PLU/Barcode #
+    sentence = re.sub('(\s*)\d{4,}(\s*)', ' ', sentence)
 
     length = len(sentence)
     start = 0
     end = length - 1
 
-    # determines and removes the leading and trailing characters
+    # determines and removes the leading and trailing spaces and blank characters
     for x in range(length):
-        start = x
-        if (sentence[x] != ' ' or sentence[x] != ''):
+        if (not sentence[x].isdigit() and not sentence[x].isalpha()):
+            start += 1
+        else:
             break
 
-    for x in range(length):
-        if (sentence[length - x - 1] != ' ' or sentence[length - x - 1] != ''):
+    for x in range(len(sentence) - 1, 0, -1):
+        if (not sentence[x].isdigit() and not sentence[x].isalpha()):
+            end -= 1
+        else:
             break
-        end = length - x
 
     #get the substring
-    sentence = sentence[start:end]
+    sentence = sentence[start:end + 1]
     return sentence
 
-def testing():
-    img = cv2.imread('../tests/images_test/rep.jpg')
-    # img1 = cv2.resize(img, (0, 0), fx = 0.2, fy = 0.2)
-    img2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    (thresh, img3) = cv2.threshold(img2, 127, 255, cv2.THRESH_BINARY)
 
-    cv2.imshow('original', img);
-    # cv2.imshow('rescaled', img1);
-    cv2.imshow('grayscaled', img2);
-    cv2.imshow('blackandwhite', img3);
-
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-testing()
+def assertFileExists(path: str):
+    """Asserts that the path that was given is valid
+    Args:
+        path (str): Path to the .txt file with expected result
+    Raises:
+        AssertionError: thrown if the path does not lead to a file
+    """
+    if not os.path.lexists(path):
+        raise Exception('File not exists in path "' + path + '".')
