@@ -67,8 +67,6 @@ def read_txt_from_image(path: str) -> list[str]:
     return read_txt
 
 
-
-
 def str_to_list_str(to_edit: str) -> list[str]:
     """Converts a single large string into a list of strings, splitting based on sentences. Case statements to filter known edge cases in read text
 
@@ -81,9 +79,9 @@ def str_to_list_str(to_edit: str) -> list[str]:
 
     to_edit = to_edit.upper()
     
-    to_edit = to_edit.replace('\n', ' ')
-
     # gets rid of everything after TOTAL and Subtotal, since none of it will be relevant
+    to_edit = to_edit.split('SUB TOTAL')
+    to_edit = to_edit[0]
     to_edit = to_edit.split('SUBTOTAL')
     to_edit = to_edit[0]
     to_edit = to_edit.split('TOTAL')
@@ -104,23 +102,21 @@ def str_to_list_str(to_edit: str) -> list[str]:
     to_edit = to_edit[len(to_edit) - 1] if len(to_edit) > 1 else to_edit[0]
 
     #gets rid of everything before a date
-    to_edit = re.split('(\d{2}[\-|\/|\s])(\d{2}[\-|\/|\s])(\d{4})', to_edit)
+    to_edit = re.split('(\d{1,2})[\/|\-|\s](\d{1,2})[\/|\-|\s]((\d{4})|(\d{2}))', to_edit)
     to_edit = to_edit[len(to_edit) - 1] if len(to_edit) > 1 else to_edit[0]
 
     #gets rid of everything before the last time stamp
     to_edit = re.split('(\d{1,2}):(\d{2})\s?([a|A|p|P][m|M])?', to_edit)
     to_edit = to_edit[len(to_edit) - 1]
 
+    to_edit = to_edit.split('\n')
+    
     #splits elements based off of where money regex was
-    if (to_edit.__contains__('$')):
-        filtered = re.split('\$\d+(?:\.\d+)?', to_edit)
-    else:
-        filtered = re.split('\d+(?:\.\d+)?', to_edit)
+    # filtered = re.split('\d+[\.|,]\d{2}', to_edit)
 
-    filtered = filter_raw_sentences(filtered)
+    filtered = filter_raw_sentences(to_edit)
 
     return filtered 
-
 
 
 def filter_raw_sentences(raw_sentence: list[str]) -> list[str]:
@@ -156,11 +152,13 @@ def filter_sentence(sentence: str) -> str:
     """
 
     # if sentence contains any of these words, likely is not relevant
-    if (re.search('COUPON', sentence) or re.search('FEE', sentence) or re.search('SHOPPING', sentence) or re.search('TAX', sentence) or re.search('PRICE', sentence) or re.search('SAVE', sentence) or re.search("% OFF", sentence)):
+    if (re.search('COUPON', sentence) or re.search('FEE', sentence) or re.search('SHOPPING', sentence) or re.search('TAX', sentence) or re.search('PRICE', sentence) or re.search('SAVE', sentence) or re.search("% OFF", sentence) or re.search("@", sentence)):
         return ""
 
     # removes any sort of PLU/Barcode #
     sentence = re.sub('(\s*)\d{4,}(\s*)', ' ', sentence)
+    sentence = re.sub('\$', '', sentence)
+    sentence = re.sub('\d+[\.|,]\d{2}', '', sentence)
 
     length = len(sentence)
     start = 0
