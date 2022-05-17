@@ -33,31 +33,31 @@ def fda_scrape_page_table(website: str) -> list[str]:
 
 
 def fda_scrape_page_single(website: str) -> str:
-    site = requests.get(website).text
-    site_data = BeautifulSoup(site, 'lxml')
-    unfiltered_recalls = site_data.find_all()
+    site = requests.get(website)
+    site_data = BeautifulSoup(site.content, 'html.parser')
+    unfiltered_recalls = site_data.find_all('td')
     found = False
 
-
+    print(unfiltered_recalls)
 
     for recall in unfiltered_recalls:
-        text = recall.text
+        print(recall.text)
 
-        # print(text)
-        if (found and re.search("[Name:]+", text)):
-            recalls = re.split("[: ]", text)
-            # print(recalls)
-            # return recalls[1]
-        elif (found and re.search("[Name of product:]+", text)):
-            recalls = re.split("[: ]", text)
-            # print(recalls)
-            # return recalls[1]
-        elif (not found and re.search("[Company Announcement]+", text)):
+    #     # print(text)
+    #     if (found and re.search("[Name:]+", text)):
+    #         recalls = re.split("[: ]", text)
+    #         # print(recalls)
+    #         # return recalls[1]
+    #     elif (found and re.search("[Name of product:]+", text)):
+    #         recalls = re.split("[: ]", text)
+    #         # print(recalls)
+    #         # return recalls[1]
+    #     elif (not found and re.search("[Company Announcement]+", text)):
             # print(text)
-            found = True
+            # found = True
     
     return "fuck"
 
 
 
-print(fda_scrape_page_single('https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/turkey-hill-dairy-issues-voluntary-recall-and-allergy-alert-undeclared-peanut-select-chocolate?permalink=3E832C22095B2F71FA3D1C6E8AF30C77D1FC8164D49EE445297719C28A37E971'))
+print(fda_scrape_page_single('https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts'))
