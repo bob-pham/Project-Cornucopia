@@ -1,11 +1,7 @@
 import requests
+from datetime import datetime
 import json
 
-# response = requests.get('https://api.fda.gov/food/enforcement.json?search=recall_initiation_date:[2022-01-01+TO+2022-02-11]&limit=20')
-# print(response)
-# print(response.json())
-
-#https://api.fda.gov/food/enforcement.json?search=recall_initiation_date:[2022-01-01+TO+2022-02-11]&limit=20
 
 recalled_items = []
 
@@ -29,7 +25,7 @@ def get_food_recalls_FDA():
             for recall in recalls:
                 name = filter_recall_for_name(recall['product_description'])
                 company = recall['recalling_firm']
-                date = recall['recall_initiation_date']
+                date = datetime.strptime(recall['recall_initiation_date'], '%Y%m%d')
                 reason = recall['reason_for_recall']
                 item = RecalledItem(name, company, date, reason)
                 recalled_items.append(item)
