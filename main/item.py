@@ -1,6 +1,4 @@
 from datetime import date
-from sqlite3 import Date
-
 from numpy import double
 
 class Item:
