@@ -78,6 +78,14 @@ def filter_recall_for_name(unfiltered: str) -> str:
 
 
 def filter_recall_for_name_canadian(unfiltered: str) -> str:
+    """filters string for the product name, which is different with Canadian recall strings
+
+    Args:
+        unfiltered (str): the string with the name that has not yet been filtered
+
+    Returns:
+        str: returns a string that contains only the product name
+    """
     unfiltered = unfiltered.split('brand')
     unfiltered = unfiltered[len(unfiltered) - 1]
     unfiltered = unfiltered.split('recalled due to ')
@@ -105,6 +113,14 @@ def filter_recall_for_name_canadian(unfiltered: str) -> str:
     
 
 def filter_recall_for_company(unfiltered: str) -> str:
+    """filtes the Canadian recall string for the company name
+
+    Args:
+        unfiltered (str): The unfiltered string that containts the company name
+
+    Returns:
+        str: company name
+    """
     unfiltered = unfiltered.split('brand')
     return unfiltered[0]
 
