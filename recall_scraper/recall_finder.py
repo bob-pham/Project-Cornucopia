@@ -9,11 +9,11 @@ recalled_items = []
 
 class RecalledItem:
 
-        def __init__(self, name, company, date, reason):
-            self.name = name
-            self.company = company
-            self.date = date
-            self.reason = reason
+    def __init__(self, name, company, date, reason):
+        self.name = name
+        self.company = company
+        self.date = date
+        self.reason = reason
 
 
 def get_food_recalls_all():
@@ -76,10 +76,40 @@ def get_food_recalls_canadian(curr_date: datetime):
 def filter_recall_for_name(unfiltered: str) -> str:
     return unfiltered
 
-def filter_recall_for_company(unfiltered: str) -> str:
+
+def filter_recall_for_name_canadian(unfiltered: str) -> str:
+    unfiltered = unfiltered.split('brand')
+    unfiltered = unfiltered[len(unfiltered) - 1]
+    unfiltered = unfiltered.split('recalled due to ')
+    unfiltered = unfiltered[0]
+
+    start = 0;
+    end = len(unfiltered) - 1
+
+    # determines and removes the leading and trailing non alphabetic characters
+    for x in range(len(unfiltered)):
+        if (not unfiltered[x].isalpha()):
+            start += 1
+        else:
+            break
+
+    for x in range(len(unfiltered) - 1, 0, -1):
+        if (not unfiltered[x].isalpha()):
+            end -= 1
+        else:
+            break
+    
+    unfiltered = unfiltered[start:end + 1]
+
     return unfiltered
+    
+
+def filter_recall_for_company(unfiltered: str) -> str:
+    unfiltered = unfiltered.split('brand')
+    return unfiltered[0]
 
 def filter_recall_for_reason(unfiltered: str) -> str:
-    return unfiltered
+    unfiltered = unfiltered.split('recalled due to ')
+    return unfiltered[len(unfiltered) - 1]
 
 get_food_recalls_all()
