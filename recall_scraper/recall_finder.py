@@ -74,6 +74,28 @@ def get_food_recalls_canadian(curr_date: datetime):
             
 
 def filter_recall_for_name(unfiltered: str) -> str:
+
+    unfiltered.split('UPC')
+    unfiltered = unfiltered[0]
+
+    start = 0
+    end = len(unfiltered) - 1
+
+    # determines and removes the leading and trailing non alphabetic characters
+    for x in range(len(unfiltered)):
+        if (not unfiltered[x].isalpha()):
+            start += 1
+        else:
+            break
+
+    for x in range(len(unfiltered) - 1, 0, -1):
+        if (not unfiltered[x].isalpha()):
+            end -= 1
+        else:
+            break
+    
+    unfiltered = unfiltered[start:end + 1]
+
     return unfiltered
 
 
