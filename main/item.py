@@ -2,7 +2,8 @@ from datetime import date
 from numpy import double
 
 class Item:
-    # TODO description of item class
+    """Represents a grocery item that will be stored within the databse
+    """
 
 
     def __init__(self, name: str, price: double, expDate: date):

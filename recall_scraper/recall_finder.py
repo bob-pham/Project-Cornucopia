@@ -74,10 +74,40 @@ def get_food_recalls_canadian(curr_date: datetime):
             
 
 def filter_recall_for_name(unfiltered: str) -> str:
+
+    unfiltered.split('UPC')
+    unfiltered = unfiltered[0]
+
+    start = 0
+    end = len(unfiltered) - 1
+
+    # determines and removes the leading and trailing non alphabetic characters
+    for x in range(len(unfiltered)):
+        if (not unfiltered[x].isalpha()):
+            start += 1
+        else:
+            break
+
+    for x in range(len(unfiltered) - 1, 0, -1):
+        if (not unfiltered[x].isalpha()):
+            end -= 1
+        else:
+            break
+    
+    unfiltered = unfiltered[start:end + 1]
+
     return unfiltered
 
 
 def filter_recall_for_name_canadian(unfiltered: str) -> str:
+    """filters string for the product name, which is different with Canadian recall strings
+
+    Args:
+        unfiltered (str): the string with the name that has not yet been filtered
+
+    Returns:
+        str: returns a string that contains only the product name
+    """
     unfiltered = unfiltered.split('brand')
     unfiltered = unfiltered[len(unfiltered) - 1]
     unfiltered = unfiltered.split('recalled due to ')
@@ -105,6 +135,14 @@ def filter_recall_for_name_canadian(unfiltered: str) -> str:
     
 
 def filter_recall_for_company(unfiltered: str) -> str:
+    """filtes the Canadian recall string for the company name
+
+    Args:
+        unfiltered (str): The unfiltered string that containts the company name
+
+    Returns:
+        str: company name
+    """
     unfiltered = unfiltered.split('brand')
     return unfiltered[0]
 
