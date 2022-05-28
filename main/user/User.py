@@ -7,7 +7,7 @@ class User:
 
 
     def __init__(self, name):
-        """Constructor of a (new) User, only requires name
+        """Constructor of a (new) User, only requires name, generates uuid and a blank log
         """
         self.name = name
         self.id = uuid.uuid4()
