@@ -1,2 +1,3 @@
 cornucopia/cornucopia/settings.py
-frontend/node_modules
+cornucopia/frontend/node_modules/
+node_modules
