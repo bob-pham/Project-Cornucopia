@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import main
+from .views import UserView, ProductView 
 
 urlpatterns = [
-    path('', main)
+    path('', UserView.as_view())
 ]
