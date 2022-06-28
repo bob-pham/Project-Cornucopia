@@ -1,15 +1,21 @@
 import React from 'react';
-import Login from './Login';
-import cornucopia from './images/cornucopia.png';
 
 function Homescreen() {
     return (
         <>
-        <div className="flex flex-wrap h-screen items-center justify-center bg-gradient-to-r from-blue-900 to-cyan-400 via-sky-700 animate-gradient-x">
-            <div className='grid place-content-center'>
-                <h1 className="mt-6 text-center text-7xl font-bold text-white">Cornucopia</h1>
-                <img src={cornucopia} alt="cornucopia logo" className="h-80 place-self-stretch"></img>
-                <Login />
+        <div>
+            <div className="drawer drawer-mobile">
+            <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-content flex flex-col items-center justify-center">
+              <label for="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">Open drawer</label>
+            </div> 
+            <div className="drawer-side">
+              <label for="my-drawer-2" className="drawer-overlay"></label> 
+              <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+                <li><a>Sidebar Item 1</a></li>
+                <li><a>Sidebar Item 2</a></li>
+              </ul>
+            </div>
             </div>
         </div>
         </>
