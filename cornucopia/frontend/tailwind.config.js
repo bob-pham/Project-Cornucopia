@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/index.js', './src/App.js', './src/Homescreen.js', './src/Login.js'],
+  content: ['./src/App.jsx', './src/Homescreen.jsx', './src/Login.jsx', './index.html'],
   theme: {
     extend: {'animation': {
       'gradient-x':'gradient-x 15s ease infinite',
