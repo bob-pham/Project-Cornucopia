@@ -18,20 +18,24 @@ export default function Homescreen() {
                 <div className="sm:mb-8 mb-3">
                     <button className="btn btn-outline btn-wide hover:bg-white border-white border-2 hover:border-white text-white hover:text-blue-500 font-bold">Stock Pantry</button>
                 </div>
-                <div className="bg-white shadow overflow-hidden rounded-lg w-9/12 min-w-fit grid font-['Merriweather'] place-items-center">
+                <div className="bg-white shadow overflow-hidden rounded-lg w-9/12 min-w-fit grid font-['Merriweather'] place-items-center pb-5">
                     <div className="flex justify-center items-center w-full">
                         <h1 className="font-['Oswald'] text-xl text-slate-800 text-center">Pantry</h1>
                     </div>
-                    <table className="table-auto text-white w-11/12">
-                        <thead className="rounded-lg bg-blue-600">
-                            <tr className="font-['Oswald']">
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Expiration Date</th>
-                                <th className="text-blue-600">temp</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div className="grid w-11/12 place-items-center">
+                        <div className="grid grid-cols-4 w-11/12 bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald']">
+                            <h1 className="w-max">Name</h1>
+                            <h1 className="w-max">Quantity</h1>
+                            <h1 className="w-max">Expiration Date</h1>
+                            <img src={trash} alt="Delete" className="ml-20 bg-blue-600"/>
+                        </div>
+                        <div className="grid grid-cols-4 w-11/12 bg-gray-400 py-3 px-10 m-1 rounded-lg text-white text-sm text-center font-['Merriweather']">
+                            <h1 className="w-max">Bananas</h1>
+                            <h1 className="w-max">3</h1>
+                            <h1 className="w-max">7/10/22</h1>
+                            <img src={trash} alt="Delete" className="ml-20 bg-gray-400"/>
+                        </div>
+                    </div>
                 </div>
             </div>
                 <label for="my-drawer-2" className="drawer-button lg:hidden fixed top-0 left-0 space-y-2 m-2">
