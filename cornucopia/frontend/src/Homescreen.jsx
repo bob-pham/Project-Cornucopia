@@ -9,6 +9,35 @@ import 'react-calendar/dist/Calendar.css';
 let itemCount = 0;
 let items = [["Bananas", "3", "07/04/22"], ["Protein Powder", "1", "08/04/22"], ["Rice", "1", "12/04/22"]]
 
+function StockPantry() {
+    return (
+        <div className="grid bg-white p-10 border-gray-200 border-4 rounded-lg place-self-center">
+            <h1 className="font-['Oswald'] text-center text-lg" >Stock Pantry</h1>
+            <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text text-slate-800 font-['Oswald']">Product Name</span>
+                </label>
+                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
+            </div>
+            <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text text-slate-800 font-['Oswald']">Company</span>
+                </label>
+                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
+            </div>
+            <div className="my-2 font-['Oswald'] text-sm">
+                <h1 className="">Select Expiration Date:</h1>
+                <Calendar />
+                <div>
+                    <span>No Expiration Date</span>
+                </div>
+                <input type="checkbox" class="toggle m-0" unchecked />
+            </div>
+            <button class="btn btn-xs sm:btn-sm md:btn-md place-self-center bg-blue-600 border-0 text-white">Add to Pantry</button>
+        </div>
+    )
+}
+
 function Header() {
     return (
     <>
@@ -18,32 +47,11 @@ function Header() {
         </div>
         <img src={cornucopia} alt="cornucopia logo" className="h-20"></img>
         <div className="sm:mb-8 mb-3">
-            <Popup trigger={<button className="btn btn-outline btn-wide hover:bg-white border-white border-2 
-            hover:border-white text-white hover:text-blue-500 font-bold">Stock Pantry</button>}>
-                <div className="grid bg-white p-10 border-gray-200 border-4 rounded-lg place-self-center">
-                    <h1 className="font-['Oswald'] text-center text-lg" >Add to Pantry</h1>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label">
-                          <span className="label-text text-slate-800 font-['Oswald']">Product Name</span>
-                        </label>
-                        <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                        <label className="label">
-                          <span className="label-text text-slate-800 font-['Oswald']">Company</span>
-                        </label>
-                        <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
-                    </div>
-                    <div className="my-2 font-['Oswald'] text-sm">
-                        <h1 className="">Select Expiration Date:</h1>
-                        <Calendar />
-                        <div>
-                            <span>No Expiration Date</span>
-                        </div>
-                        <input type="checkbox" class="toggle m-0" unchecked />
-                    </div>
-                    <button class="btn btn-xs sm:btn-sm md:btn-md place-self-center bg-blue-600 border-0 text-white">Add to Pantry</button>
-                </div>
+            <Popup 
+            trigger={<button className="btn btn-outline btn-wide hover:bg-white border-white border-2 hover:border-white text-white hover:text-blue-500 font-bold">
+                Stock Pantry</button>}
+            modal>
+                <StockPantry />
             </Popup>
         </div>
     </>)
@@ -106,8 +114,15 @@ export default function Homescreen() {
                 <img src={cornucopia} alt="" className="w-1/4 place-self-center"/>
                 <li><a>View Pantry
                     <img src={eye} alt="" /></a></li>
-                <li><a>Stock Pantry
-                    <img src={food} alt="" /></a></li>
+                <li>
+                    <Popup 
+                        trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
+                        modal>
+                        <StockPantry />
+                    </Popup>
+                </li>
+                {/* <li><a>Stock Pantry
+                    <img src={food} alt="" /></a></li> */}
                 <li><a>Trash
                     <img src={trash} alt="" /></a></li>
               </ul>
