@@ -1,39 +1,48 @@
+import Popup from 'reactjs-popup';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'; 
+
 import cornucopia from './cornucopia.png';
 import eye from './icons/icons8-eye-24.png';
 import trash from './icons/icons8-trash-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
-import Calendar from 'react-calendar';
-import Popup from 'reactjs-popup';
-import 'react-calendar/dist/Calendar.css'; 
+import picture from './icons/icons8-picture-24.png';
 
 let itemCount = 0;
 let items = [["Bananas", "3", "07/04/22"], ["Protein Powder", "1", "08/04/22"], ["Rice", "1", "12/04/22"]]
 
 function StockPantry() {
     return (
-        <div className="grid bg-white p-10 border-gray-200 border-4 rounded-lg place-self-center">
-            <h1 className="font-['Oswald'] text-center text-lg" >Stock Pantry</h1>
-            <div className="form-control w-full max-w-xs">
+        <div className="grid bg-white p-5 border-gray-200 border-4 rounded-lg place-self-center place-items-center w-fit">
+            <h1 className="font-['Oswald'] text-center text-lg text-slate-900" >Stock Pantry</h1>
+            {/* <input className="btn text-center bg-slate-700">
+                Upload Autofill
+            </input> */}
+            <div>
+                <label for="files" className="btn bg-slate-800">
+                    <img className="m-1" src={picture} alt="" />
+                    Upload Auto-fill</label>
+                <input id="files" className="hidden" type="file" accept="image/jpeg,image/gif,image/png"/>
+            </div>
+            <div className="form-control max-w-xs w-fit">
                 <label className="label">
                   <span className="label-text text-slate-800 font-['Oswald']">Product Name</span>
                 </label>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
+                <input type="text" placeholder="Type here" className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
             </div>
-            <div className="form-control w-full max-w-xs">
+            <div className="form-control max-w-xs w-fit">
                 <label className="label">
                   <span className="label-text text-slate-800 font-['Oswald']">Company</span>
                 </label>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs bg-gray-300 font-['Merriweather']" />
+                <input type="text" placeholder="Type here" className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
             </div>
-            <div className="my-2 font-['Oswald'] text-sm">
-                <h1 className="">Select Expiration Date:</h1>
-                <Calendar />
-                <div>
-                    <span>No Expiration Date</span>
-                </div>
+            <h1 className="">Select Expiration Date:</h1>
+            <Calendar className="w-fit"/>
+            <div className="grid my-2 font-['Oswald'] text-sm place-items-center">
+                <span>No Expiration Date</span>
+            </div>
                 <input type="checkbox" class="toggle m-0" unchecked />
-            </div>
-            <button class="btn btn-xs sm:btn-sm md:btn-md place-self-center bg-blue-600 border-0 text-white">Add to Pantry</button>
+            <button class="btn btn-xs sm:btn-sm md:btn-md bg-blue-600 border-0 text-white mt-1">Add to Pantry</button>
         </div>
     )
 }
