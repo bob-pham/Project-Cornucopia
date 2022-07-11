@@ -16,7 +16,7 @@ let items = [["Bananas", "3", "07/04/22"], ["Protein Powder", "1", "08/04/22"], 
 function Header() {
     return (
     <>
-        <div className="bg-white shadow overflow-hidden rounded-lg w-1/2 min-w-fit mb-2 sm:my-0 my-16">
+        <div className="bg-white shadow overflow-hidden rounded-lg w-1/2 min-w-fit mb-2 sm:my-0 my-16 drop-shadow-2xl">
             <h1 className="p-5 leading-none text-6xl font-['Oswald'] text-center">Cornucopia</h1>
             <h4 className="font-['Merriweather'] text-center text-lg text-gray-400">From Bob Pham</h4>
         </div>
@@ -38,28 +38,28 @@ function ItemRow() {
     itemCount = (itemCount + 1) % items.length;
 
     return (
-        <div className="grid sm:grid-cols-5 place-items-center w-11/12 bg-gray-400 py-3 px-10 p-1 m-1 rounded-lg text-white text-sm text-center font-['Merriweather']">
+        <div className="grid sm:grid-cols-4 place-items-center w-full bg-gray-500 py-3 px-10 p-1 m-1 rounded-lg text-white text-sm text-center font-['Merriweather']">
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Product Name</h1>
             <h1 className="w-max ">{item[0]}</h1>
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Quantity</h1>
             <h1 className="w-max ">{item[1]}</h1>
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Expiration Date</h1>
             <h1 className="w-max">{item[2]}</h1>
-            <div className="grid grid-cols-2 place-self-center">
-                <Popup trigger={<button><img src={trash} alt="Delete" className="ml-20 bg-gray-400"/></button>} modal>
-                <div className="alert shadow-lg">
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span>Remove Pantry Item?</span>
+            <div className="grid grid-cols-2 place-self-center place-content-center">
+                <Popup trigger={<input type="image" src={trash} className="mx-5 bg-gray-500"/>} modal>
+                    <div className="alert shadow-lg">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>Remove Pantry Item?</span>
+                        </div>
+                        <div className="flex-none">
+                          <button className="btn btn-sm btn-ghost">Cancel</button>
+                          <button className="btn btn-sm btn-error">Remove</button>
+                        </div>
                     </div>
-                    <div className="flex-none">
-                      <button className="btn btn-sm btn-ghost">Cancel</button>
-                      <button className="btn btn-sm btn-primary">Remove</button>
-                    </div>
-                </div>
                 </Popup>
 
-                <Popup trigger={<button><img src={pencil} alt="Edit" className="ml-20 bg-gray-400" /></button>}
+                <Popup trigger={<input type="image" src={pencil} className="mx-5 bg-gray-500"/>}
                        modal>
                     <EditItem />
                 </Popup>
@@ -76,12 +76,12 @@ export default function Homescreen() {
             <div className="drawer-content flex flex-col items-center justify-center">
                 <div className="w-full flex flex-col items-center justify-center text-slate-800">
                     <Header />
-                    <div className="grid bg-white rounded-lg w-9/12 min-w-fit font-['Merriweather'] place-items-center pb-10">
+                    <div className="grid bg-white rounded-lg w-9/12 min-w-fit font-['Merriweather'] place-items-center pb-10 drop-shadow-2xl sm:mb-0 mb-10">
                         <div className="flex justify-center items-center w-full">
                             <h1 className="font-['Oswald'] text-xl text-slate-800 text-center p-2">Pantry</h1>
                         </div>
                         <div className="grid w-11/12 place-items-center">
-                            <div className="sm:grid sm:grid-cols-5 sm:place-items-center w-11/12 bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
+                            <div className="sm:grid sm:grid-cols-4 sm:place-items-center w-full bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
                                 <h1 className="w-max">Name</h1>
                                 <h1 className="w-max">Quantity</h1>
                                 <h1 className="w-max">Expiration Date</h1>
@@ -105,8 +105,7 @@ export default function Homescreen() {
               <label htmlFor="my-drawer-2" className="drawer-overlay" ></label>
               <ul className="menu p-4 overflow-y-auto w-80 sm:bg-base-100 bg-orange-400 font-['Merriweather'] text-white">
                 <img src={cornucopia} alt="" className="w-1/4 place-self-center"/>
-                <li><a>View Pantry
-                    <img src={eye} alt="" /></a></li>
+                <li><button>Scan Pantry<img src={eye} alt="" /></button></li>
                 <li>
                     <Popup 
                         trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
