@@ -118,9 +118,11 @@ export default function Homescreen() {
                     modal>
                         <Trash />
                     </Popup>    
+                </li>
+                <li>
+                    <a href="/login">Sign out</a>
                 </li>                
               </ul>
-
             </div>
         </div>
         </>
