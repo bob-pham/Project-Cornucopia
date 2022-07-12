@@ -6,7 +6,8 @@ import picture from './icons/icons8-picture-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
 import trash from './icons/icons8-trash-24.png';
 
-let batch = [];
+let batchCount = 0;
+let batch = [["1XT-SHIRT", "N/A"], ["1X WATCHES", "N/A"], ["1X PANTS", "N/A"], ["1X SOCKS", "N/A"]];
 
 function DefaultRender() {
     return (
@@ -36,15 +37,19 @@ function DefaultRender() {
 }
 
 function BatchSlice() {
+
+    let item = batch[batchCount];
+    batchCount = (batchCount + 1) % batch.length;
+
     return (
-        <div>
+        <div className="grid place-items-center m-3 border border-gray-100 rounded-lg p-3 w-fit">
             <div className="form-control max-w-xs w-fit m-1">
                 <span className="label-text text-slate-800 font-['Oswald']">Product Name</span>
-                <input type="text" placeholder="Type here" className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
+                <input type="text" defaultValue={item[0]} className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
             </div>
             <div className="form-control max-w-xs w-fit m-1">
                 <span className="label-text text-slate-800 font-['Oswald']">Company</span>
-                <input type="text" placeholder="Type here" className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
+                <input type="text" defaultValue={item[1]} className="input input-bordered w-fit max-w-xs bg-gray-300 font-['Merriweather']" />
             </div>
                 <input className="input-sm" id="num1" min="1" max="20" type="number" value="1" />
                 <input type="range" min="1" max="20" value="1" className="range-lg"/>
@@ -58,7 +63,7 @@ function BatchSlice() {
                 <img src={food} alt="" />
                 Add to Pantry
             </button>
-            <input type="image" src={trash}/>
+            <input type="image" src={trash} className="btn btn-error md:btn-md sm:btn-sm btn-xs m-3"/>
         </div>
     )
 }
@@ -66,7 +71,7 @@ function BatchSlice() {
 function BatchRender() {
     return (
         <>
-        <div className="grid auto-cols-max">
+        <div className="grid md:auto-cols-fit md:grid-flow-col-dense auto-rows-fit grid-flow-row-dense w-11/12">
             {batch.map(b => (<BatchSlice />))}
         </div>
         </>
@@ -75,7 +80,7 @@ function BatchRender() {
 
 export default function StockPantry() {
     return (
-        <div className="grid bg-white p-5 border-gray-200 border-4 rounded-lg place-self-center place-items-center w-fit">
+        <div className="grid bg-white p-5 border-gray-200 border-4 rounded-lg place-self-center place-items-center md:w-fit overflow-scroll w-screen sm:h-fit h-screen">
             <h1 className="font-['Oswald'] text-center text-lg text-slate-900" >Stock Pantry</h1>
             <div>
                 <label className="btn bg-slate-800">
@@ -83,7 +88,7 @@ export default function StockPantry() {
                     Receipt Batch Scan</label>
                 <input className="hidden" onClick={() => state = !state}/>
             </div>
-        <Menu />
+        <BatchRender />
         </div>
     )
 }
