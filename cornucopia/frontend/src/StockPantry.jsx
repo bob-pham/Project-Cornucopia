@@ -72,23 +72,40 @@ function BatchRender() {
     return (
         <>
         <div className="grid md:auto-cols-fit md:grid-flow-col-dense auto-rows-fit grid-flow-row-dense w-11/12">
-            {batch.map(b => (<BatchSlice />))}
+            {/* {batch.map(b => (<BatchSlice />))} */}
         </div>
         </>
     )
 }
 
 export default function StockPantry() {
+
+    const [curr, setCurr] = useState();
+
     return (
         <div className="grid bg-white p-5 border-gray-200 border-4 rounded-lg place-self-center place-items-center md:w-fit overflow-scroll w-screen sm:h-fit h-screen">
             <h1 className="font-['Oswald'] text-center text-lg text-slate-900" >Stock Pantry</h1>
-            <div>
-                <label className="btn bg-slate-800">
-                    <img className="m-1" src={picture} alt="" />
-                    Receipt Batch Scan</label>
-                <input className="hidden" onClick={() => state = !state}/>
+            <div className="grid grid-cols-2">
+                <button className="btn btn-info m-1 ">Manual Add</button>
+                <div className=" m-1">
+                    <label className="btn bg-slate-800" for='image-upload'>
+                        <img className="m-1" src={picture} alt="" />
+                        Receipt Batch Scan
+                    </label>
+                    <input type='file' id='image-upload' className="hidden"/>
+                </div>
             </div>
-        <BatchRender />
+            <div>
+                <div className="hidden">
+                    <div className="flex justify-center items-center space-x-2">
+                      <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                </div>
+                <BatchRender className="hidden" />
+            </div>
+            <DefaultRender />
         </div>
     )
 }
