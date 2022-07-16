@@ -3,13 +3,13 @@ import Popup from 'reactjs-popup';
 import StockPantry from './StockPantry';
 import Trash from './Trash'
 import ItemRow from './ItemRow';
+import Header from './Header';
 import 'react-calendar/dist/Calendar.css'; 
 
 import cornucopia from './cornucopia.png';
 import eye from './icons/icons8-eye-24.png';
 import trash from './icons/icons8-trash-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
-import pencil from './icons/icons8-edit-24.png'
 
 class Item {
     constructor(name, company, quantity, date) {
@@ -20,33 +20,15 @@ class Item {
     }
 }
 
-function Header() {
-    return (
-    <>
-        <div className="bg-white shadow overflow-hidden rounded-lg w-1/2 min-w-fit mb-2 sm:my-0 my-16 drop-shadow-2xl">
-            <h1 className="p-5 leading-none text-6xl font-['Oswald'] text-center">Cornucopia</h1>
-            <h4 className="font-['Merriweather'] text-center text-lg text-gray-400">From Bob Pham</h4>
-        </div>
-        <img src={cornucopia} alt="cornucopia logo" className="h-20"></img>
-        <div className="sm:mb-8 mb-3">
-            <Popup 
-            trigger={<button className="btn btn-outline btn-wide hover:bg-white border-white border-2 hover:border-white text-white hover:text-blue-500 font-bold">
-                Stock Pantry</button>}
-            modal>
-                <StockPantry />
-            </Popup>
-        </div>
-    </>)
-}
-
-
-
 export default function Homescreen() {
 
     const [items, setItems] = useState({"0": new Item("Bananas", "N/A", 1, new Date())});
     const [count, setCount] = useState(0);
 
     const Items = () => {
+
+        console.log(items);
+
         if (items.length === 0) {
             return (
                 <div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2" >
@@ -68,7 +50,7 @@ export default function Homescreen() {
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col items-center justify-center">
                 <div className="w-full flex flex-col items-center justify-center text-slate-800">
-                    <Header />
+                    <Header setItems={setItems} currCount={count} setCount={setCount}/>
                     <div className="grid bg-white rounded-lg w-9/12 min-w-fit font-['Merriweather'] place-items-center pb-10 drop-shadow-2xl sm:mb-0 mb-10">
                         <div className="flex justify-center items-center w-full">
                             <h1 className="font-['Oswald'] text-xl text-slate-800 text-center p-2">Pantry</h1>
@@ -81,7 +63,7 @@ export default function Homescreen() {
                                 <h1 className="w-max">Expiration Date</h1>
                                 <h1 className="w-max ml-20">Actions</h1>
                             </div>
-                            {Items()}
+                            {<Items />}
                         </div>
                     </div>
                 </div>
@@ -101,7 +83,7 @@ export default function Homescreen() {
                         trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
                         modal>
                             {close => (
-                                <StockPantry closePopup={ close } setItems={ setItems } />
+                                <StockPantry closePopup={ close } setItems={ setItems } currCount={ count } setCount={ setCount } />
                             )}
                     </Popup>
                 </li>

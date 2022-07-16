@@ -1,53 +1,30 @@
 import { useState } from 'react';
-import Calendar from 'react-calendar';
 import BatchSlice from './BatchSlice'
+import DefaultRender from './DefaultRender';
 
 import picture from './icons/icons8-picture-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
 import trash from './icons/icons8-trash-24.png';
 
-let items = [["1XT-SHIRT", "N/A"], ["1X WATCHES", "N/A"], ["1X PANTS", "N/A"], ["1X SOCKS", "N/A"]];
+export default function StockPantry(props) {
 
-class Item {
-    constructor(name, company, quantity, date) {
-        this.name = name;
-        this.company = company;
-        this.quantity = quantity;
-        this.date = date;
-    }
-}
-
-export default function StockPantry({ closePopup }) {
-
-    const [states, setStates] = useState({
-        selected: false,
-        single: true,
-        elements: {}
-    });
+    const [selected, setSelected] = useState(false);
+    const [single, setSingle] = useState(true);
 
     const selectSingle = () => {
-        setStates(previousState => {
-            return {
-                selected: true,
-                single: true,
-                elements: {0: new Item("", "", "")}
-            }
-        })   
+        setSelected(true);
+        setSingle(true);
     }
 
     const selectBatch = () => {
-        setStates(previousState => {
-            return {
-                selected: true,
-                single: false
-            }
-        })   
+        setSelected(true);
+        setSingle(false);
     }
 
     const renderElements = () => {
-        if (states.selected) {
-            if (states.single) {
-                return (<DefaultRender closePopup={ closePopup } addToState={ setItems } />);
+        if (selected) {
+            if (single) {
+                return (<DefaultRender closePopup={ props.closePopup } setItems={ props.setItems } currCount={props.currCount} setCount={props.setCount} />);
             } else {
                 return (
                 <div className="grid md:auto-cols-fit md:grid-flow-col-dense auto-rows-fit grid-flow-row-dense w-11/12">
@@ -64,7 +41,7 @@ export default function StockPantry({ closePopup }) {
     return (
         <div className="grid bg-white p-5 border-gray-200 border-4 rounded-lg place-self-center place-items-center md:w-fit overflow-scroll w-screen sm:h-fit h-screen">
             <h1 className="font-['Oswald'] text-center text-lg text-slate-900" >Stock Pantry</h1>
-            <div className={states.selected ? "hidden" : "grid grid-cols-2"}>
+            <div className={selected ? "hidden" : "grid grid-cols-2"}>
                 <button className="btn btn-info m-1" onClick={selectSingle}>Manual Add</button>
                 <div className=" m-1" >
                     <label className="btn bg-slate-800" for='image-upload' onClick={() => setTimeout(selectBatch, 3000)}>
