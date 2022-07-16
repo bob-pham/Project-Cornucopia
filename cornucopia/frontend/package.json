@@ -15,7 +15,8 @@
     "react-calendar": "^3.7.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
-    "reactjs-popup": "^2.0.5"
+    "reactjs-popup": "^2.0.5",
+    "tw-elements": "^1.0.0-alpha12"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
