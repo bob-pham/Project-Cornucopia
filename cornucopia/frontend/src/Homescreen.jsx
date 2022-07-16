@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import Popup from 'reactjs-popup';
 import StockPantry from './StockPantry';
-import EditItem from './EditItem';
 import Trash from './Trash'
+import ItemRow from './ItemRow';
 import 'react-calendar/dist/Calendar.css'; 
 
 import cornucopia from './cornucopia.png';
@@ -10,8 +11,14 @@ import trash from './icons/icons8-trash-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
 import pencil from './icons/icons8-edit-24.png'
 
-let itemCount = 0;
-let items = [["Bananas", "3", "07/04/22"], ["Protein Powder", "1", "08/04/22"], ["Rice", "1", "12/04/22"]]
+class Item {
+    constructor(name, company, quantity, date) {
+        this.name = name;
+        this.company = company;
+        this.quantity = quantity;
+        this.date = date;
+    }
+}
 
 function Header() {
     return (
@@ -32,43 +39,29 @@ function Header() {
     </>)
 }
 
-function ItemRow() {
 
-    let item = items[itemCount];
-    itemCount = (itemCount + 1) % items.length;
-
-    return (
-        <div className="grid sm:grid-cols-4 place-items-center w-full bg-gray-500 py-3 px-10 p-1 m-1 rounded-lg text-white text-sm text-center font-['Merriweather']">
-            <h1 className="sm:hidden text-lg w-max font-['Oswald']">Product Name</h1>
-            <h1 className="w-max ">{item[0]}</h1>
-            <h1 className="sm:hidden text-lg w-max font-['Oswald']">Quantity</h1>
-            <h1 className="w-max ">{item[1]}</h1>
-            <h1 className="sm:hidden text-lg w-max font-['Oswald']">Expiration Date</h1>
-            <h1 className="w-max">{item[2]}</h1>
-            <div className="grid grid-cols-2 place-self-center place-content-center">
-                <Popup trigger={<input type="image" src={trash} className="mx-5 bg-gray-500"/>} modal>
-                    <div className="alert shadow-lg">
-                        <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span>Remove Pantry Item?</span>
-                        </div>
-                        <div className="flex-none">
-                          <button className="btn btn-sm btn-ghost">Cancel</button>
-                          <button className="btn btn-sm btn-error">Remove</button>
-                        </div>
-                    </div>
-                </Popup>
-
-                <Popup trigger={<input type="image" src={pencil} className="mx-5 bg-gray-500"/>}
-                       modal>
-                    <EditItem />
-                </Popup>
-            </div>
-        </div>
-    )
-}
 
 export default function Homescreen() {
+
+    const [items, setItems] = useState({0: new Item("Bananas", "N/A", 1, new Date())});
+    const [count, setCount] = useState(0);
+
+    const Items = () => {
+        if (items.length === 0) {
+            return (
+                <div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2" >
+                    <h1 className="text-white font-['Merriweather']">Pantry is Empty!</h1>
+                </div>
+            )
+        } else {
+            return (
+                <>
+                {Object.entries(items).map( ([key, value]) => <ItemRow itemKey={key} name={value.name} company={value.company} quantity={value.quantity} date={value.date.toISOString().split('T')[0]} allItems={setItems}/>)}
+                </>
+            )
+        }
+    }
+
     return (
         <>
         <div className="drawer drawer-mobile bg-gradient-to-r from-yellow-500 to-orange-600 via-amber-500 animate-gradient-x sm:h-screen h-fit">
@@ -81,17 +74,14 @@ export default function Homescreen() {
                             <h1 className="font-['Oswald'] text-xl text-slate-800 text-center p-2">Pantry</h1>
                         </div>
                         <div className="grid w-11/12 place-items-center">
-                            <div className="sm:grid sm:grid-cols-4 sm:place-items-center w-full bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
+                            <div className="sm:grid sm:grid-cols-5 sm:place-items-center w-full bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
                                 <h1 className="w-max">Name</h1>
+                                <h1 className="w-max">Brand</h1>
                                 <h1 className="w-max">Quantity</h1>
                                 <h1 className="w-max">Expiration Date</h1>
                                 <h1 className="w-max ml-20">Actions</h1>
                             </div>
-                            {
-                                items.map(item => (
-                                    <ItemRow />
-                                ))
-                            }
+                            {Items()}
                         </div>
                     </div>
                 </div>
@@ -110,7 +100,9 @@ export default function Homescreen() {
                     <Popup 
                         trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
                         modal>
-                            <StockPantry />
+                            {close => (
+                                <StockPantry closePopup={ close } setItems={ setItems } />
+                            )}
                     </Popup>
                 </li>
                 <li><Popup
