@@ -32,7 +32,7 @@ export default function ItemRow(props) {
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Quantity</h1>
             <h1 className="w-max ">{quantity}</h1>
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Expiration Date</h1>
-            <h1 className="w-max">{expDate}</h1>
+            <h1 className="w-max">{expDate === null ? "No Expiration Date!" : expDate}</h1>
             <div className="grid grid-cols-2 place-self-center place-content-center">
                 <Popup trigger={<input type="image" src={trash} className="mx-5 bg-gray-500"/>} modal>
                     {close => (
@@ -51,7 +51,7 @@ export default function ItemRow(props) {
 
                 <Popup trigger={<input type="image" src={pencil} className="mx-5 bg-gray-500"/>}
                        modal>
-                        {close => (<EditItem closer={close} key={props.key} labels={labels} setters={setters} allItems={props.allItems}/>)}
+                        {close => (<EditItem closer={close} key={props.itemKey} itemKey={props.itemKey} labels={labels} setters={setters} allItems={props.allItems}/>)}
                 </Popup>
             </div>
         </div>

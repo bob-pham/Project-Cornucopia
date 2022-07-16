@@ -17,27 +17,34 @@ export default function EditItem(props) {
     const [prodName, setProdName] = useState(props.labels.prodName);
     const [compName, setCompName] = useState(props.labels.compName);
     const [quantity, setQuantity] = useState(props.labels.quantity);
-    const [expDate, setExpDate] = useState(new Date(props.labels.expDate));
-
-    let prodTracker = false;
-    let compTracker = false;
-    let quantTracker = false;
-    let dateTracker = false;
-
+    const [expDate, setExpDate] = useState(props.labels.expDate === null ? null : new Date(props.labels.expDate));
+    const [hasDate, setHasDate] = useState(props.labels.expDate != null);
+    
     const saveItem = () => {
-        // props.allItems(prevState => {
-        //     let temp = new Item(prodName, compName, quantity, expDate);
-        //     let tempDict = {...prevState};
-        //     tempDict[props.itemKey] = temp;
-        //     return tempDict;
-        // })
+
+        props.allItems(prevState => {
+            let temp = new Item(prodName, compName, quantity, expDate);
+            let tempDict = {...prevState};
+            tempDict[props.itemKey] = temp;
+            return tempDict;
+        })
 
         props.setters.setProdName(prodName);
         props.setters.setCompName(compName);
         props.setters.setQuantity(quantity);
-        props.setters.setExpDate(expDate.toISOString().split('T')[0]);
+        props.setters.setExpDate(expDate === null ? null : expDate.toISOString().split('T')[0]);
 
         props.closer();
+    }
+
+    const noExp = e => {
+        if (e) {
+            setExpDate(null);
+            setHasDate(false);
+        } else {
+            setExpDate(new Date());
+            setHasDate(true);
+        }        
     }
 
     return (
@@ -59,11 +66,11 @@ export default function EditItem(props) {
                 placeholder={props.labels.quantity} defaultValue={props.labels.quantity} value={quantity} onChange={e => setQuantity(e.target.value)} />
             </div>
             <h1 className="">Select Expiration Date:</h1>
-            <Calendar className="w-fit" onChange={setExpDate} value={new Date(props.labels.expDate)}/>
+            <Calendar className={hasDate ? "w-fit" : "hidden"} onChange={setExpDate} value={expDate === null ? new Date() : new Date(props.labels.expDate)}/>
             <div className="grid my-2 font-['Oswald'] text-sm place-items-center">
                 <span>No Expiration Date</span>
             </div>
-                <input type="checkbox" class="toggle m-0" unchecked />
+                <input type="checkbox" class="toggle m-0" checked={!hasDate} unchecked={hasDate} value={hasDate} onChange={e => noExp(e.target.checked)}/>
             <button class="btn btn-xs sm:btn-sm md:btn-md bg-blue-600 border-0 text-white mt-1" onClick={saveItem}>
                 <img src={food} alt="" />
                 Save Item</button>

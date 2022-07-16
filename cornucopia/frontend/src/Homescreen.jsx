@@ -43,7 +43,7 @@ function Header() {
 
 export default function Homescreen() {
 
-    const [items, setItems] = useState({0: new Item("Bananas", "N/A", 1, new Date())});
+    const [items, setItems] = useState({"0": new Item("Bananas", "N/A", 1, new Date())});
     const [count, setCount] = useState(0);
 
     const Items = () => {
@@ -56,7 +56,7 @@ export default function Homescreen() {
         } else {
             return (
                 <>
-                {Object.entries(items).map( ([key, value]) => <ItemRow itemKey={key} name={value.name} company={value.company} quantity={value.quantity} date={value.date.toISOString().split('T')[0]} allItems={setItems}/>)}
+                {Object.entries(items).map( ([key, value]) => (<ItemRow key={key} itemKey={key} name={value.name} company={value.company} quantity={value.quantity} date={value.date === null ? null : value.date.toISOString().split('T')[0]} allItems={setItems}/>))}
                 </>
             )
         }
@@ -85,7 +85,7 @@ export default function Homescreen() {
                         </div>
                     </div>
                 </div>
-                <label for="my-drawer-2" className="drawer-button lg:hidden fixed top-0 left-0 space-y-2 m-2">
+                <label htmlFor="my-drawer-2" className="drawer-button lg:hidden fixed top-0 left-0 space-y-2 m-2">
                     <span className="block w-8 h-1 bg-white"></span>
                     <span className="block w-8 h-1 bg-white"></span>
                     <span className="block w-8 h-1 bg-white"></span>
