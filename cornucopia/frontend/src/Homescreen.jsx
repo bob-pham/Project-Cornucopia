@@ -31,7 +31,7 @@ export default function Homescreen() {
 
         if (items.length === 0) {
             return (
-                <div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2" >
+                <div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2 " >
                     <h1 className="text-white font-['Merriweather']">Pantry is Empty!</h1>
                 </div>
             )
@@ -46,16 +46,16 @@ export default function Homescreen() {
 
     return (
         <>
-        <div className="drawer drawer-mobile bg-gradient-to-r from-yellow-500 to-orange-600 via-amber-500 animate-gradient-x sm:h-screen h-fit">
+        <div className="drawer drawer-mobile bg-gradient-to-r from-yellow-500 to-orange-600 via-amber-500 animate-gradient-x sm:h-screen h-screen">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col items-center justify-center">
-                <div className="w-full flex flex-col items-center justify-center text-slate-800">
+            <div className="drawer-content grid place-items-center">
+                <div className="w-full grid place-items-center text-slate-800 py-10">
                     <Header setItems={setItems} currCount={count} setCount={setCount}/>
                     <div className="grid bg-white rounded-lg w-9/12 min-w-fit font-['Merriweather'] place-items-center pb-10 drop-shadow-2xl sm:mb-0 mb-10">
                         <div className="flex justify-center items-center w-full">
                             <h1 className="font-['Oswald'] text-xl text-slate-800 text-center p-2">Pantry</h1>
                         </div>
-                        <div className="grid w-11/12 place-items-center">
+                        <div className="grid w-11/12 place-items-center ">
                             <div className="sm:grid sm:grid-cols-5 sm:place-items-center w-full bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
                                 <h1 className="w-max">Name</h1>
                                 <h1 className="w-max">Brand</h1>
