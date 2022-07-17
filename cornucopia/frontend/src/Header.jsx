@@ -6,7 +6,7 @@ import cornucopia from './cornucopia.png';
 export default function Header(props) {
     return (
     <>
-        <div className="bg-white shadow overflow-hidden rounded-lg w-1/2 min-w-fit mb-2 sm:my-0 my-16 drop-shadow-2xl">
+        <div className="bg-white shadow overflow-hidden rounded-lg w-1/2 min-w-fit mb-2 sm:my-0 my-16 md:drop-shadow-2xl">
             <h1 className="p-5 leading-none text-6xl font-['Oswald'] text-center">Cornucopia</h1>
             <h4 className="font-['Merriweather'] text-center text-lg text-gray-400">From Bob Pham</h4>
         </div>

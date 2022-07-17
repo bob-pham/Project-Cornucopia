@@ -24,7 +24,7 @@ export default function ItemRow(props) {
     }
 
     return (
-        <div className="grid sm:grid-cols-5 place-items-center w-full bg-gray-500 py-3 px-10 p-1 m-1 rounded-lg text-white text-sm text-center font-['Merriweather']">
+        <div className="grid sm:grid-cols-5 place-items-center w-full bg-gray-200 animate-gradient-x py-3 px-10 p-1 m-1 rounded-lg text-slate-800 text-sm text-center font-['Merriweather']">
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Product Name</h1>
             <h1 className="w-max ">{prodName}</h1>
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Brand</h1>
@@ -34,7 +34,7 @@ export default function ItemRow(props) {
             <h1 className="sm:hidden text-lg w-max font-['Oswald']">Expiration Date</h1>
             <h1 className="w-max">{expDate === null ? "No Expiration Date!" : expDate}</h1>
             <div className="grid grid-cols-2 place-self-center place-content-center">
-                <Popup trigger={<input type="image" src={trash} className="mx-5 bg-gray-500"/>} modal>
+                <Popup trigger={<input type="image" src={trash} className="mx-5 btn btn-xs btn-error"/>} modal>
                     {close => (
                         <div className="alert shadow-lg">
                             <div>
@@ -49,7 +49,7 @@ export default function ItemRow(props) {
                     )}
                 </Popup>
 
-                <Popup trigger={<input type="image" src={pencil} className="mx-5 bg-gray-500"/>}
+                <Popup trigger={<input type="image" src={pencil} className="mx-5 btn btn-xs btn-accent"/>}
                        modal>
                         {close => (<EditItem closer={close} key={props.itemKey} itemKey={props.itemKey} labels={labels} setters={setters} allItems={props.allItems}/>)}
                 </Popup>

@@ -53,10 +53,10 @@ export default function Homescreen() {
                     <Header setItems={setItems} currCount={count} setCount={setCount}/>
                     <div className="grid bg-white rounded-lg w-9/12 min-w-fit font-['Merriweather'] place-items-center pb-10 drop-shadow-2xl sm:mb-0 mb-10">
                         <div className="flex justify-center items-center w-full">
-                            <h1 className="font-['Oswald'] text-xl text-slate-800 text-center p-2">Pantry</h1>
+                            <h1 className="font-['Oswald'] text-xl sm:text-slate-800 text-blue-500 text-center p-2">Pantry</h1>
                         </div>
                         <div className="grid w-11/12 place-items-center ">
-                            <div className="sm:grid sm:grid-cols-5 sm:place-items-center w-full bg-blue-600 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
+                            <div className="sm:grid sm:grid-cols-5 sm:place-items-center w-full bg-gradient-to-r from-blue-600 to-cyan-400 via-sky-500 py-3 px-10 m-1 rounded-lg text-white font-['Oswald'] hidden">
                                 <h1 className="w-max">Name</h1>
                                 <h1 className="w-max">Brand</h1>
                                 <h1 className="w-max">Quantity</h1>
@@ -75,7 +75,7 @@ export default function Homescreen() {
             </div> 
             <div className="drawer-side">
               <label htmlFor="my-drawer-2" className="drawer-overlay" ></label>
-              <ul className="menu p-4 overflow-y-auto w-80 sm:bg-base-100 bg-orange-400 font-['Merriweather'] text-white">
+              <ul className="menu p-4 overflow-y-auto w-80 bg-gradient-to-r from-blue-900 to-cyan-400 via-sky-700 animate-gradient-x sm:border-r-2 border-white font-['Merriweather'] text-white">
                 <img src={cornucopia} alt="" className="w-1/4 place-self-center"/>
                 <li><button>Scan Pantry<img src={eye} alt="" /></button></li>
                 <li>
