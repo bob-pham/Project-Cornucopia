@@ -22,27 +22,9 @@ class Item {
 
 export default function Homescreen() {
 
-    const [items, setItems] = useState({"0": new Item("Bananas", "N/A", 1, new Date())});
+    const [items, setItems] = useState({0: new Item("Bananas", "N/A", 1, new Date())});
+    const [garbage, setGarbage] = useState({});
     const [count, setCount] = useState(0);
-
-    const Items = () => {
-
-        console.log(items);
-
-        if (items.length === 0) {
-            return (
-                <div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2 " >
-                    <h1 className="text-white font-['Merriweather']">Pantry is Empty!</h1>
-                </div>
-            )
-        } else {
-            return (
-                <>
-                {Object.entries(items).map( ([key, value]) => (<ItemRow key={key} itemKey={key} name={value.name} company={value.company} quantity={value.quantity} date={value.date === null ? null : value.date.toISOString().split('T')[0]} allItems={setItems}/>))}
-                </>
-            )
-        }
-    }
 
     return (
         <>
@@ -63,7 +45,8 @@ export default function Homescreen() {
                                 <h1 className="w-max">Expiration Date</h1>
                                 <h1 className="w-max ml-20">Actions</h1>
                             </div>
-                            {<Items />}
+                            {Object.keys(items).length < 1 ? (<div className="grid place-items-center w-full bg-gray-700 rounded-lg p-2" ><h1 className="text-white font-['Merriweather'] mt-3">Pantry is Empty!</h1><img src={cornucopia} className="h-20"/></div>) 
+                            : (<>{Object.entries(items).map( ([key, value]) => (<ItemRow key={key} itemKey={key} name={value.name} company={value.company} quantity={value.quantity} date={value.date === null ? null : value.date.toISOString().split('T')[0]} allItems={setItems} setGarbage={setGarbage} />))}</>)}
                         </div>
                     </div>
                 </div>
@@ -90,7 +73,7 @@ export default function Homescreen() {
                 <li><Popup
                     trigger={<button>Trash<img src={trash} /></button>}
                     modal>
-                        <Trash />
+                        <Trash garbage={garbage} setGarbage={setGarbage} setItems={setItems} />
                     </Popup>    
                 </li>
                 <li>

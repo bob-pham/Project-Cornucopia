@@ -5,6 +5,15 @@ import EditItem from './EditItem';
 import pencil from './icons/icons8-edit-24.png'
 import trash from './icons/icons8-trash-24.png';
 
+class Item {
+    constructor(name, company, quantity, date) {
+        this.name = name;
+        this.company = company;
+        this.quantity = quantity;
+        this.date = date;
+    }
+}
+
 export default function ItemRow(props) {
 
     const [prodName, setProdName] = useState(props.name);
@@ -19,6 +28,12 @@ export default function ItemRow(props) {
         props.allItems(prevState => {
             let temp = {...prevState};
             delete temp[props.itemKey];
+            return temp;
+        })
+
+        props.setGarbage(ps => {
+            let temp = {...ps};
+            temp[props.itemKey] = new Item(prodName, compName, quantity, expDate);
             return temp;
         })
     }
