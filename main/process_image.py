@@ -15,7 +15,7 @@ IMG_SIZE = 500
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 def crop_image(image, img_x1: int, img_y1: int, img_x2: int, img_y2: int):
-    """crops an image pased on parameters
+    """crops an image pased on parameters, returns the image cropped
 
     Args:
         image (img): the image
