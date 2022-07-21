@@ -10,6 +10,7 @@ import cornucopia from './cornucopia.png';
 import eye from './icons/icons8-eye-24.png';
 import trash from './icons/icons8-trash-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
+import ladle from './icons/icons8-ladle-24.png';
 
 class Item {
     constructor(name, company, quantity, date) {
@@ -61,6 +62,7 @@ export default function Homescreen() {
               <ul className="menu p-4 overflow-y-auto w-80 bg-gradient-to-r from-blue-900 to-cyan-400 via-sky-700 animate-gradient-x sm:border-r-2 border-white font-['Merriweather'] text-white">
                 <img src={cornucopia} alt="" className="w-1/4 place-self-center"/>
                 <li><button>Scan Pantry<img src={eye} alt="" /></button></li>
+                <li><button>Find Recipes<img src={ladle} alt=""/></button></li>
                 <li>
                     <Popup 
                         trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
