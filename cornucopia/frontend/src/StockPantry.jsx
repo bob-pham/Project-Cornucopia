@@ -9,6 +9,7 @@ export default function StockPantry(props) {
     const [selected, setSelected] = useState(false);
     const [single, setSingle] = useState(true);
     const [sliceCount, setSliceCount] = useState(4);
+    const [visible, setVisible] = useState(false);
 
     const selectSingle = () => {
         setSelected(true);
@@ -19,6 +20,18 @@ export default function StockPantry(props) {
         setSelected(true);
         setSingle(false);
     }
+
+    const cheating = () => {
+        setTimeout(() => setVisible(true), 10000)
+        setTimeout(() => setVisible(false), 10000000)
+
+        return (<div className={!visible ? "flex justify-center items-center" : "hidden"}>
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>)
+    }
+
 
     let items = [["1XT-SHIRT" ,"N/A"], ["1X WATCHES", "N/A"], ["1X PANTS", "N/A"], ["1X SOCKS", "N/A"]];
 
@@ -36,12 +49,13 @@ export default function StockPantry(props) {
                 </div>
             </div>
             {selected ? (single ? (<DefaultRender closePopup={ props.closePopup } setItems={ props.setItems } currCount={props.currCount} setCount={props.setCount} />) 
-                        : (<>
+                        : (visible ? (<>
                             <div className="grid md:auto-cols-fit md:grid-flow-col-dense auto-rows-fit grid-flow-row-dense w-11/12">
                                 {items.map(item => ( <BatchSlice key={item[0]} prodName={item[0]} compName={item[1]} sliceCount={sliceCount} setSliceCount={setSliceCount} closePopup={ props.closePopup } setItems={ props.setItems } currCount={props.currCount} setCount={props.setCount} />))}
                             </div>
                             <button className="btn btn-xs sm:btn-sm md:btn-md text-white mt-2 btn-error" onClick={props.closePopup}>Cancel</button>
-                          </>))
+                          </>
+                          ) : cheating()))
                         : null}
         </div>
     )

@@ -11,6 +11,7 @@ import eye from './icons/icons8-eye-24.png';
 import trash from './icons/icons8-trash-24.png';
 import food from './icons/icons8-vegetarian-food-24.png';
 import ladle from './icons/icons8-ladle-24.png';
+import cheese from './icons/th-3934322090.jpg';
 
 class Item {
     constructor(name, company, quantity, date) {
@@ -23,9 +24,32 @@ class Item {
 
 export default function Homescreen() {
 
-    const [items, setItems] = useState({0: new Item("Bananas", "N/A", 1, new Date())});
+    const [items, setItems] = useState({});
     const [garbage, setGarbage] = useState({});
     const [count, setCount] = useState(0);
+    const [visible, setVisible] = useState(false);
+    const [visible1, setVisible1] = useState(false);
+
+    const cheating = () => {
+        setTimeout(() => setVisible(true), 5000);
+        setTimeout(() => setVisible(false), 1000000);
+        return (<div className={!visible ? "flex justify-center items-center" : "hidden"}>
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-gray-300" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>)
+    }
+
+    const cheating2 = () => {
+        setTimeout(() => setVisible1(true), 5000);
+        setTimeout(() => setVisible1(false), 1000000);
+        return (<div className={!visible ? "flex justify-center items-center" : "hidden"}>
+            <h1 className="text-xl font-['Oswald'] text-white text-center m-3">Finding Recipe...</h1>
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-gray-300" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>)
+    }
 
     return (
         <>
@@ -61,8 +85,31 @@ export default function Homescreen() {
               <label htmlFor="my-drawer-2" className="drawer-overlay" ></label>
               <ul className="menu p-4 overflow-y-auto w-80 bg-gradient-to-r from-blue-900 to-cyan-400 via-sky-700 animate-gradient-x sm:border-r-2 border-white font-['Merriweather'] text-white">
                 <img src={cornucopia} alt="" className="w-1/4 place-self-center"/>
-                <li><button>Scan Pantry<img src={eye} alt="" /></button></li>
-                <li><button>Find Recipes<img src={ladle} alt=""/></button></li>
+                <li>
+                    <Popup 
+                    trigger={<button >Scan Pantry <img src={eye} alt=""/></button>} 
+                    modal >
+                        <div className="w-screen grid place-items-center">
+                            <div className="grid place-items-center bg-slate-800 border-white border-2 rounded-lg w-11/12">
+                            <h1 className="text-xl font-['Oswald'] text-white text-center m-3">Recalls:</h1>
+                            {visible ? (<h1 className="text-xl font-['Oswald'] text-white text-center m-3" >No Recalls!</h1>) : (cheating())}
+                            </div>
+                        </div>
+                    </Popup>
+                </li>
+                <li><Popup 
+                    trigger={<button>Find Recipes<img src={ladle} alt=""/></button>} 
+                    modal>
+                        <div className="grid w-screen place-items-center ">
+                            <div className="grid place-items-center bg-purple-600 border-white border-2 rounded-lg w-11/12">
+                            {visible1 ? (<><h1 className="text-xl font-['Oswald'] text-white text-center m-3">Suggested Recipe: Grilled Cheese!</h1>
+                            <img src={cheese} />
+                            <h2 className="text-xl font-['Oswald'] text-white text-center m-3">Uses:</h2>
+                            <h4 className="text-xl font-['Oswald'] text-white text-center m-3">Bread</h4>
+                            <h4 className="text-xl font-['Oswald'] text-white text-center m-3">Cheese</h4></>) : cheating2()}
+                            </div>
+                        </div>
+                    </Popup></li>
                 <li>
                     <Popup 
                         trigger={<button>Stock Pantry <img src={food} alt=""/></button>} 
