@@ -1,9 +1,32 @@
 # Project-Cornucopia
 
-Cornucopia is intended to be an app which scans user grocery receipts to help manage kitchen pantries and minimize food waste.
+## Cornucopia is an app which helps users manage kitchen pantries and minimize food waste
 
-Backend is being created using the Django Python framework, whereas the frontend is being created using React and Tailwindcss
+Created using:
+- Python
+- Django
+- OpenCV
+- PyTesseract
+- React
+- Tailwindcss
 
-## Further Reading:
+## Features:
+- Users add grocery items to a digital pantry
+- Items can be added to pantry individually or in batches by scanning grocery receipts
+- Items can be deleted from pantry
+- Items that are accidentally deleted can be restored after up to 30 days
+- Based on grocery receipt items, suggests potential meals
+- Users are notified when pantry items near expiration
+- Users are notified when pantry items are recalled by government institutions
+
+- Includes custom accuracy testing framework in tests folder
+
+**Requires PyTesseract Installed, and path to .exe linked in process_image.py** 
+
+# Demo:
+
+https://www.youtube.com/watch?v=FyvjRFwsdPY
+
+# Further Reading:
 https://bob-pham.github.io/project_pages/cornucopia.html
 
