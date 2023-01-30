@@ -28,5 +28,5 @@ Created using:
 https://www.youtube.com/watch?v=FyvjRFwsdPY
 
 # Further Reading:
-https://bob-pham.github.io/project_pages/cornucopia.html
+https://bobpham.vercel.app/project-cornucopia
 
